@@ -3,6 +3,7 @@
 #include "GLFW/glfw3.h"
 #include "string.h"
 
+using namespace std;
 //window size
 const GLint width = 800;
 const GLint height = 600;
@@ -10,18 +11,26 @@ const GLint height = 600;
 GLuint VBO;
 GLuint VAO;
 GLuint shader;
+GLuint uniformXMove;
+
+bool direction = true;
+float triOffset = 0.0f;
+float triMaxOffset = 0.7f;
+float triIncrement = 0.005f;
 
 //Vertex Shader
 static const char* vShader = 
-"																	\n\
-	 #version 330 core												\n\
-																	\n\
-	 layout(location = 0) in vec3 pos;								\n\
-																	\n\
-	 void main()													\n\
-	 {																\n\
-		gl_Position = vec4(0.4 * pos.x, 0.4 * pos.y, pos.z, 1.0);	\n\
-	 }																\n\
+"																			\n\
+	 #version 330 core														\n\
+																			\n\
+	 layout(location = 0) in vec3 pos;										\n\
+																			\n\
+	 uniform float xMove;													\n\
+																			\n\
+	 void main()															\n\
+	 {																		\n\
+		gl_Position = vec4(0.4 * pos.x + xMove, 0.4 * pos.y, pos.z, 1.0);	\n\
+	 }																		\n\
 ";
 
 //Fragment Shader
@@ -55,8 +64,8 @@ void CreateTriangle()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, NULL);
+	glBindVertexArray(NULL);
 }
 
 void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
@@ -79,7 +88,7 @@ void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
 	if (!result)
 	{
 		glGetShaderInfoLog(theShader, sizeof(eLog), NULL, eLog);
-		std::cout << "Error compiling the " << shaderType << " shader: " << eLog << std::endl;
+		cout << "Error compiling the " << shaderType << " shader: " << eLog << endl;
 		return;
 	}
 
@@ -92,7 +101,7 @@ void CompileShader()
 
 	if (!shader)
 	{
-		std::cout << "Error creating shader program" << std::endl;
+		cout << "Error creating shader program" << endl;
 		return;
 	}
 
@@ -107,7 +116,7 @@ void CompileShader()
 	if (!result)
 	{
 		glGetProgramInfoLog(shader, sizeof(eLog), NULL, eLog);
-		std::cout << "Error linking program: " << eLog << std::endl;
+		cout << "Error linking program: " << eLog << endl;
 		return;
 	}
 
@@ -116,9 +125,11 @@ void CompileShader()
 	if (!result)
 	{
 		glGetProgramInfoLog(shader, sizeof(eLog), NULL, eLog);
-		std::cout << "Error validating program: " << eLog << std::endl;
+		cout << "Error validating program: " << eLog << endl;
 		return;
 	}
+
+	uniformXMove = glGetUniformLocation(shader, "xMove");
 }
 
 int main()
@@ -126,7 +137,7 @@ int main()
 	//initialize GLFW
 	if(!glfwInit()) 
 	{
-		printf("GLFW initialization failed !");
+		cout << "GLFW initialization failed !" << endl;
 		glfwTerminate();
 		return 1;
 	}
@@ -145,7 +156,7 @@ int main()
 	GLFWwindow* mainWindow = glfwCreateWindow(width, height, "Test window", NULL, NULL);
 	if (!mainWindow)
 	{
-		printf("GLFW window creation failed!");
+		cout << "GLFW window creation failed!" << endl;
 		glfwTerminate();
 		return 1;
 	}
@@ -163,7 +174,7 @@ int main()
 
 	if (glewInit() != GLEW_OK)
 	{
-		printf("Glew initialization falied!");
+		cout << "Glew initialization falied!" << endl;
 		glfwDestroyWindow(mainWindow);
 		glfwTerminate();
 		return 1;
@@ -179,14 +190,31 @@ int main()
 	while (!glfwWindowShouldClose(mainWindow))
 	{
 		glfwPollEvents();
+
+		if (direction)
+		{
+			triOffset += triIncrement;
+		}
+		else
+		{
+			triOffset -= triIncrement;
+		}
 		
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		if (abs(triOffset) >= triMaxOffset)
+		{
+			direction = !direction;
+		}
+
+		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glUseProgram(shader);
+
+		glUniform1f(uniformXMove, triOffset);
+		
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(0);
-		glUseProgram(0);
+		glBindVertexArray(NULL);
+		glUseProgram(NULL);
 		glfwSwapBuffers(mainWindow);
 	}
 	return 0;
