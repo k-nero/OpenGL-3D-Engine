@@ -3,6 +3,7 @@
 #include "GLFW/glfw3.h"
 #include "string.h"
 
+using namespace std;
 //window size
 const GLint width = 800;
 const GLint height = 600;
@@ -79,7 +80,7 @@ void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
 	if (!result)
 	{
 		glGetShaderInfoLog(theShader, sizeof(eLog), NULL, eLog);
-		std::cout << "Error compiling the " << shaderType << " shader: " << eLog << std::endl;
+		cout << "Error compiling the " << shaderType << " shader: " << eLog << endl;
 		return;
 	}
 
@@ -92,7 +93,7 @@ void CompileShader()
 
 	if (!shader)
 	{
-		std::cout << "Error creating shader program" << std::endl;
+		cout << "Error creating shader program" << endl;
 		return;
 	}
 
@@ -107,7 +108,7 @@ void CompileShader()
 	if (!result)
 	{
 		glGetProgramInfoLog(shader, sizeof(eLog), NULL, eLog);
-		std::cout << "Error linking program: " << eLog << std::endl;
+		cout << "Error linking program: " << eLog << endl;
 		return;
 	}
 
@@ -116,7 +117,7 @@ void CompileShader()
 	if (!result)
 	{
 		glGetProgramInfoLog(shader, sizeof(eLog), NULL, eLog);
-		std::cout << "Error validating program: " << eLog << std::endl;
+		cout << "Error validating program: " << eLog << endl;
 		return;
 	}
 }
@@ -126,7 +127,7 @@ int main()
 	//initialize GLFW
 	if(!glfwInit()) 
 	{
-		printf("GLFW initialization failed !");
+		cout << "GLFW initialization failed !" << endl;
 		glfwTerminate();
 		return 1;
 	}
@@ -145,7 +146,7 @@ int main()
 	GLFWwindow* mainWindow = glfwCreateWindow(width, height, "Test window", NULL, NULL);
 	if (!mainWindow)
 	{
-		printf("GLFW window creation failed!");
+		cout << "GLFW window creation failed!" << endl;
 		glfwTerminate();
 		return 1;
 	}
@@ -163,7 +164,7 @@ int main()
 
 	if (glewInit() != GLEW_OK)
 	{
-		printf("Glew initialization falied!");
+		cout << "Glew initialization falied!" << endl;
 		glfwDestroyWindow(mainWindow);
 		glfwTerminate();
 		return 1;
