@@ -11,15 +11,15 @@
 using namespace std;
 using namespace glm;
 //window size
-constexpr GLint width = 800;
-constexpr GLint height = 600;
+constexpr int WIDTH = 800;
+constexpr int HEIGHT = 600;
 
 double curAngle = 0.0;
 
-GLuint VBO;
-GLuint VAO;
-GLuint shader;
-GLint uniformModel;
+unsigned int VBO;
+unsigned int VAO;
+unsigned int shader;
+int uniformModel;
 
 bool direction = true;
 float triOffset = 0.0f;
@@ -37,7 +37,7 @@ static const char* vShader =
 																			\n\
 	 void main()															\n\
 	 {																		\n\
-		gl_Position = model * vec4(0.4 * pos.x, 0.4 * pos.y, pos.z, 1.0);	\n\
+		gl_Position = model * vec4(pos, 1.0);								\n\
 	 }																		\n\
 ";
 
@@ -54,7 +54,7 @@ static const char* fShader =
 	 }																\n\
 ";
 
-double radiants(const double degrees)
+double Radiants(const double degrees)
 {
 	return degrees * 3.14159265358979323846 / 180.0;
 }
@@ -81,21 +81,21 @@ void CreateTriangle()
 	glBindVertexArray(NULL);
 }
 
-void AddShader(const GLuint theProgram, const char* shaderCode, const GLenum shaderType)
+void AddShader(const unsigned int theProgram, const char* shaderCode, const unsigned int shaderType)
 {
-	const GLuint theShader = glCreateShader(shaderType);
+	const unsigned int theShader = glCreateShader(shaderType);
 
-	const GLchar* theCode[1];
+	const char* theCode[1];
 	theCode[0] = shaderCode;
 
-	GLint codeLength[1];
+	int codeLength[1];
 	codeLength[0] = static_cast<int>(strlen(shaderCode));
 
 	glShaderSource(theShader, 1, theCode, codeLength);
 	glCompileShader(theShader);
 
-	GLint result = 0;
-	GLchar eLog[1024] = { 0 };
+	int result = 0;
+	char eLog[1024] = { 0 };
 
 	glGetShaderiv(theShader, GL_COMPILE_STATUS, &result);
 	if (!result)
@@ -121,8 +121,8 @@ void CompileShader()
 	AddShader(shader, vShader, GL_VERTEX_SHADER);
 	AddShader(shader, fShader, GL_FRAGMENT_SHADER);
 
-	GLint result = 0;
-	GLchar eLog[1024] = { 0 };
+	int result = 0;
+	char eLog[1024] = { 0 };
 
 	glLinkProgram(shader);
 	glGetProgramiv(shader, GL_LINK_STATUS, &result);
@@ -166,7 +166,7 @@ int main()
 	//Allow forward compatibility
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	
-	GLFWwindow* mainWindow = glfwCreateWindow(width, height, "Test window", nullptr, nullptr);
+	GLFWwindow* mainWindow = glfwCreateWindow(WIDTH, HEIGHT, "Test window", nullptr, nullptr);
 	if (!mainWindow)
 	{
 		cout << "GLFW window creation failed!" << endl;
@@ -228,8 +228,12 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 		glUseProgram(shader);
 
-		mat4 model = translate(mat4(1.0f), vec3(triOffset, 0.0f, 0.0f));
-		model = rotate(model,static_cast<float>(radiants(curAngle)), vec3(0.0f, 0.0f, 1.0f));
+		auto model = mat4(1.0f);
+		model = translate(model, vec3(triOffset, 0.0f, 0.0f));
+		/*
+		model = rotate(mat4(1.0f), static_cast<float>(radiants(curAngle)), vec3(0.0f, 0.0f, 1.0f));
+		*/
+		model = scale(model, vec3(0.4f, 0.4f, 1.0f));
 		
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, value_ptr(model));
 		
