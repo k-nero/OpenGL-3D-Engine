@@ -1,10 +1,6 @@
 #pragma once
 
-#include "iostream"
 #include "string"
-#include "fstream"
-
-#include "GL/glew.h"
 
 using namespace std;
 
@@ -26,6 +22,6 @@ private:
 	int uniformModel;
 
 	void CompileShader(const char* vertexCode, const char* fragmentCode);
-	static void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType);
+	static void AddShader(unsigned int theProgram, const char* shaderCode, unsigned int shaderType);
 };
 

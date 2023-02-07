@@ -1,5 +1,8 @@
 #include "Shader.h"
+#include "fstream"
+#include "iostream"
 
+#include "GL/glew.h"
 Shader::Shader()
 {
 	shaderID = 0;
@@ -105,7 +108,7 @@ void Shader::ClearShader()
 	uniformProjection = 0;
 }	
 
-void Shader::AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
+void Shader::AddShader(unsigned int theProgram, const char* shaderCode, unsigned int shaderType)
 {
 	const unsigned int theShader = glCreateShader(shaderType);
 
