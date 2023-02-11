@@ -13,9 +13,10 @@ public:
 	int Initialize();
 	[[nodiscard]] int GetBufferWidth() const { return bufferWidth; }
 	[[nodiscard]] int GetBufferHeight() const { return bufferHeight; }
-
 	[[nodiscard]] bool GetShouldClose() const { return glfwWindowShouldClose(mainWindow); }
 	void SwapBuffers() const { glfwSwapBuffers(mainWindow); }
+	void SetShouldClose() const { glfwSetWindowShouldClose(mainWindow, GL_TRUE); }
+	void SetFrameBufferSizeCallback() const;
 	~Window();
 private:
 	GLFWwindow* mainWindow = nullptr;

@@ -14,6 +14,18 @@ Window::Window(int windowWidth, int windowHeight)
 	height = windowHeight;
 }
 
+void FramebufferSizeCallback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
+	
+}
+
+void Window::SetFrameBufferSizeCallback() const
+{
+	glfwSetFramebufferSizeCallback(mainWindow, FramebufferSizeCallback);
+}
+
+
 int Window::Initialize()
 {
 	//initialize GLFW
@@ -66,7 +78,6 @@ int Window::Initialize()
 	glViewport(0, 0, bufferWidth, bufferHeight);
 	return 0;
 }
-
 
 Window::~Window()
 {

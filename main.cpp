@@ -60,21 +60,26 @@ int main()
 {
 	mainWindow = Window();
 	mainWindow.Initialize();
+	mainWindow.SetFrameBufferSizeCallback();
 
 	CreateObject();
 	CreateShader();
-
-	mat4 projection = perspective(45.0f, static_cast<float>(mainWindow.GetBufferWidth()) / static_cast<float>(mainWindow.GetBufferHeight()), 0.1f, 100.0f);
 
 	//Loop until window closed
 	while (!mainWindow.GetShouldClose())
 	{
 		glfwPollEvents();
 
+		int currentWindowSize[4];
+		glGetIntegerv(GL_VIEWPORT, currentWindowSize);
+
+		mat4 projection = perspective(45.0f, static_cast<float>(currentWindowSize[2]) / static_cast<float>(currentWindowSize[3]), 0.1f, 100.0f);
+
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		shaderList[0]->UseShader();
+
 		const int uniformModel = shaderList[0]->GetModelLocation();
 		const int uniformProjection = shaderList[0]->GetProjectionLocation();
 
