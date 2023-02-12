@@ -5,7 +5,7 @@
 #include "GL/glew.h"
 Shader::Shader()
 {
-	shaderID = 0;
+	shaderId = 0;
 	uniformProjection = 0;
 	uniformModel = 0;
 }
@@ -49,6 +49,11 @@ int Shader::GetModelLocation() const
 	return uniformModel;
 }
 
+int Shader::GetViewLocation() const
+{
+	return uniformView;
+}
+
 void Shader::CreateFromString(const char* vertexCode, const char* fragmentCode)
 {
 	CompileShader(vertexCode, fragmentCode);
@@ -56,53 +61,54 @@ void Shader::CreateFromString(const char* vertexCode, const char* fragmentCode)
 
 void Shader::CompileShader(const char* vertexCode, const char* fragmentCode)
 {
-	shaderID = glCreateProgram();
+	shaderId = glCreateProgram();
 
-	if (!shaderID)
+	if (!shaderId)
 	{
 		cout << "Error creating shader program" << endl;
 		return;
 	}
 
-	AddShader(shaderID, vertexCode, GL_VERTEX_SHADER);
-	AddShader(shaderID, fragmentCode, GL_FRAGMENT_SHADER);
+	AddShader(shaderId, vertexCode, GL_VERTEX_SHADER);
+	AddShader(shaderId, fragmentCode, GL_FRAGMENT_SHADER);
 
 	int result = 0;
 	char eLog[1024] = { 0 };
 
-	glLinkProgram(shaderID);
-	glGetProgramiv(shaderID, GL_LINK_STATUS, &result);
+	glLinkProgram(shaderId);
+	glGetProgramiv(shaderId, GL_LINK_STATUS, &result);
 	if (!result)
 	{
-		glGetProgramInfoLog(shaderID, sizeof(eLog), nullptr, eLog);
+		glGetProgramInfoLog(shaderId, sizeof(eLog), nullptr, eLog);
 		cout << "Error linking program: " << eLog << endl;
 		return;
 	}
 
-	glValidateProgram(shaderID);
-	glGetProgramiv(shaderID, GL_VALIDATE_STATUS, &result);
+	glValidateProgram(shaderId);
+	glGetProgramiv(shaderId, GL_VALIDATE_STATUS, &result);
 	if (!result)
 	{
-		glGetProgramInfoLog(shaderID, sizeof(eLog), nullptr, eLog);
+		glGetProgramInfoLog(shaderId, sizeof(eLog), nullptr, eLog);
 		cout << "Error validating program: " << eLog << endl;
 		return;
 	}
 
-	uniformModel = glGetUniformLocation(shaderID, "model");
-	uniformProjection = glGetUniformLocation(shaderID, "projection");
+	uniformModel = glGetUniformLocation(shaderId, "model");
+	uniformProjection = glGetUniformLocation(shaderId, "projection");
+	uniformView = glGetUniformLocation(shaderId, "view");
 }
 
 void Shader::UseShader() const	
 {
-	glUseProgram(shaderID);
+	glUseProgram(shaderId);
 }
 
 void Shader::ClearShader()
 {
-	if (shaderID != 0)
+	if (shaderId != 0)
 	{
-		glDeleteProgram(shaderID);
-		shaderID = 0;
+		glDeleteProgram(shaderId);
+		shaderId = 0;
 	}
 	uniformModel = 0;
 	uniformProjection = 0;

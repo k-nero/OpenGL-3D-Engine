@@ -11,15 +11,17 @@ public:
 	void CreateFromString(const char* vertexCode, const char* fragmentCode);
 	void CreateFromFile(const char* vertexLocation, const char* fragmentLocation);
 	string ReadFile(const char* fileLocation) const;
-	int GetProjectionLocation() const;
-	int GetModelLocation() const;
+	[[nodiscard]] int GetProjectionLocation() const;
+	[[nodiscard]] int GetModelLocation() const;
+	[[nodiscard]] int GetViewLocation() const;
 	void UseShader() const;
 	void ClearShader();
 	~Shader();
 private:
-	int shaderID;
+	int shaderId;
 	int uniformProjection;
 	int uniformModel;
+	int uniformView;
 
 	void CompileShader(const char* vertexCode, const char* fragmentCode);
 	static void AddShader(unsigned int theProgram, const char* shaderCode, unsigned int shaderType);

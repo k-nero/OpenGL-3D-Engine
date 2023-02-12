@@ -11,13 +11,18 @@
 #include "Window.h"
 #include "Mesh.h"
 #include "Shader.h"
+#include "Camera.h"
 
 using namespace std;
 using namespace glm;
 
 Window mainWindow;
+Camera camera;
 vector<Mesh*> meshList;
 vector<Shader*> shaderList;
+
+float deltaTime = 0.0f;
+float lastTime = 0.0f;
 
 //Fragment Shader
 static const char* vShaderLocation = "Shader/TriangleVert.shader";
@@ -59,8 +64,8 @@ void CreateShader()
 int main()
 {
 	mainWindow = Window();
+	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 1.0f, 0.5f);
 	mainWindow.Initialize();
-	mainWindow.SetFrameBufferSizeCallback();
 
 	CreateObject();
 	CreateShader();
@@ -68,29 +73,34 @@ int main()
 	//Loop until window closed
 	while (!mainWindow.GetShouldClose())
 	{
+		const auto now = static_cast<float>(glfwGetTime());
+		deltaTime = now - lastTime;
+		lastTime = now;
+
 		glfwPollEvents();
 
-		int currentWindowSize[4];
-		glGetIntegerv(GL_VIEWPORT, currentWindowSize);
-
-		mat4 projection = perspective(45.0f, static_cast<float>(currentWindowSize[2]) / static_cast<float>(currentWindowSize[3]), 0.1f, 100.0f);
+		camera.KeyControl(mainWindow.GetKeys(), deltaTime);
+		camera.MouseControl(mainWindow.GetXChange(), mainWindow.GetYChange());
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		shaderList[0]->UseShader();
 
-		const int uniformModel = shaderList[0]->GetModelLocation();
+		mat4 projection = perspective(45.0f, static_cast<float>(mainWindow.GetWidth()) / static_cast<float>(mainWindow.GetHeight()), 0.1f, 100.0f);
 		const int uniformProjection = shaderList[0]->GetProjectionLocation();
+		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, value_ptr(projection));
+
+		mat4 view = camera.CalculateViewMatrix();
+		const int uniformView = shaderList[0]->GetViewLocation();
+		glUniformMatrix4fv(uniformView, 1, GL_FALSE, value_ptr(view));
 
 		auto model = mat4(1.0f);
 		model = translate(model, vec3(0.0f, 0.0f, -2.5f));
 		model = rotate(model, static_cast<float>(Radiants(0)), vec3(0.0f, 1.0f, 0.0f));
 		model = scale(model, vec3(0.4f, 0.4f, 1.0f));
-
-		
+		const int uniformModel = shaderList[0]->GetModelLocation();
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, value_ptr(model));
-		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, value_ptr(projection));
 
 		meshList[0]->RenderMesh();
 

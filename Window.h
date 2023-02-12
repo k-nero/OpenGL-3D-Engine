@@ -1,9 +1,5 @@
 #pragma once
-#include "iostream"
-
 #include "GLFW/glfw3.h"
-
-using namespace std;
 
 class Window
 {
@@ -14,14 +10,28 @@ public:
 	[[nodiscard]] int GetBufferWidth() const { return bufferWidth; }
 	[[nodiscard]] int GetBufferHeight() const { return bufferHeight; }
 	[[nodiscard]] bool GetShouldClose() const { return glfwWindowShouldClose(mainWindow); }
+	[[nodiscard]] int GetWidth() const { return width; }
+	[[nodiscard]] int GetHeight() const { return height; }
+	bool * GetKeys() { return key; }
+	[[nodiscard]] float GetXChange() ;
+	[[nodiscard]] float GetYChange() ;
 	void SwapBuffers() const { glfwSwapBuffers(mainWindow); }
 	void SetShouldClose() const { glfwSetWindowShouldClose(mainWindow, GL_TRUE); }
-	void SetFrameBufferSizeCallback() const;
 	~Window();
 private:
 	GLFWwindow* mainWindow = nullptr;
 	int width, height;
 	int bufferWidth = 0, bufferHeight = 0;
+
+	bool key[1024];
+
+	float lastX = 0, lastY = 0, xChange = 0, yChange = 0;
+	bool mouseFirstMoved = true;
+
+	void CreateCallbacks() const;
+	static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
+	static void HandleKey(GLFWwindow* window, int key, int code, int action, int mode);
+	static void HandleMouse(GLFWwindow* window, double xPos, double yPos);
 };
 
 

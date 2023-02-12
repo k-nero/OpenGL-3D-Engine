@@ -1,11 +1,21 @@
+#include "iostream"
+
 #include "GL/glew.h"
 #include "Window.h"
 
+using namespace std;
 
 Window::Window()
 {
 	width = 800;
 	height = 600;
+
+	*key = new bool[1024];
+
+	for (bool & i : key)
+	{
+		i = false;
+	}
 }
 
 Window::Window(int windowWidth, int windowHeight)
@@ -14,18 +24,55 @@ Window::Window(int windowWidth, int windowHeight)
 	height = windowHeight;
 }
 
-void FramebufferSizeCallback(GLFWwindow* window, int width, int height)
+void Window::FramebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
+	auto* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+	theWindow->width = width;
+	theWindow->height = height;
 	glViewport(0, 0, width, height);
-	
 }
 
-void Window::SetFrameBufferSizeCallback() const
+void Window::HandleKey(GLFWwindow* window, int key, int code, int action, int mode)
 {
-	glfwSetFramebufferSizeCallback(mainWindow, FramebufferSizeCallback);
+	auto* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+	const int cursorMode = glfwGetInputMode(theWindow->mainWindow, GLFW_CURSOR);
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
+		if (cursorMode == GLFW_CURSOR_NORMAL)
+		{
+			glfwSetInputMode(theWindow->mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+		else
+		{
+			glfwSetInputMode(theWindow->mainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+	}
+	if (key >= 0 && key <= 1024 && cursorMode == GLFW_CURSOR_DISABLED)
+	{
+		if (action == GLFW_PRESS)
+		{
+			theWindow -> key[key] = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			theWindow -> key[key] = false;
+		}
+	}
 }
 
+float Window::GetXChange()
+{
+	const float delta = xChange;
+	xChange = 0.0f;
+	return delta;
+}
 
+float Window::GetYChange()
+{
+	const float delta = yChange;
+	yChange = 0.0f;
+	return delta;
+}
 int Window::Initialize()
 {
 	//initialize GLFW
@@ -61,6 +108,12 @@ int Window::Initialize()
 	//set context for GLEW to use
 	glfwMakeContextCurrent(mainWindow);
 
+	//handle call back
+	CreateCallbacks();
+
+	//lock mouse
+	glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 	//allow modern extension features
 	glewExperimental = GL_TRUE;
 
@@ -76,7 +129,39 @@ int Window::Initialize()
 
 	//setup viewport size
 	glViewport(0, 0, bufferWidth, bufferHeight);
+	glfwSetWindowUserPointer(mainWindow, this);
 	return 0;
+}
+
+void Window::HandleMouse(GLFWwindow* window, const double xPos, const double yPos)
+{
+	auto* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+
+	if (glfwGetInputMode(theWindow->mainWindow, GLFW_CURSOR) == GLFW_CURSOR_DISABLED)
+	{
+		if (theWindow->mouseFirstMoved)
+		{
+			theWindow->lastX = static_cast<float>(xPos);
+			theWindow->lastY = static_cast<float>(yPos);
+			theWindow->mouseFirstMoved = false;
+		}
+
+		theWindow->xChange = static_cast<float>(xPos) - theWindow->lastX;
+		theWindow->yChange = theWindow->lastY - static_cast<float>(yPos);
+
+		theWindow->lastX = static_cast<float>(xPos);
+		theWindow->lastY = static_cast<float>(yPos);
+	}
+}
+
+void Window::CreateCallbacks() const
+{
+	//handle key
+	glfwSetKeyCallback(mainWindow, HandleKey);
+	//handle window resize
+	glfwSetFramebufferSizeCallback(mainWindow, FramebufferSizeCallback);
+	//handle mouse
+	glfwSetCursorPosCallback(mainWindow, HandleMouse);
 }
 
 Window::~Window()
