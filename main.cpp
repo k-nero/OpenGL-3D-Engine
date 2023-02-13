@@ -79,7 +79,7 @@ int main()
 
 		glfwPollEvents();
 
-		camera.KeyControl(mainWindow.GetKeys(), deltaTime);
+		camera.KeyControl(mainWindow.GetKey(), deltaTime);
 		camera.MouseControl(mainWindow.GetXChange(), mainWindow.GetYChange());
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
