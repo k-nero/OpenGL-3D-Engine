@@ -15,6 +15,8 @@ public:
 	bool * GetKeys() { return key; }
 	[[nodiscard]] float GetXChange() ;
 	[[nodiscard]] float GetYChange() ;
+	[[nodiscard]] int	GetVSyncStatus() const { return VSync; }
+	void SetVSyncStatus(const int status) { VSync = status; }
 	void SwapBuffers() const { glfwSwapBuffers(mainWindow); }
 	void SetShouldClose() const { glfwSetWindowShouldClose(mainWindow, GL_TRUE); }
 	~Window();
@@ -22,6 +24,8 @@ private:
 	GLFWwindow* mainWindow = nullptr;
 	int width, height;
 	int bufferWidth = 0, bufferHeight = 0;
+
+	int VSync = GLFW_TRUE;
 
 	bool key[1024];
 

@@ -127,6 +127,9 @@ int Window::Initialize()
 
 	glEnable(GL_DEPTH_TEST);
 
+	//Vertical sync
+	glfwSwapInterval(GLFW_TRUE);
+
 	//setup viewport size
 	glViewport(0, 0, bufferWidth, bufferHeight);
 	glfwSetWindowUserPointer(mainWindow, this);
