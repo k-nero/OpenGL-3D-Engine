@@ -12,7 +12,7 @@ public:
 	[[nodiscard]] bool GetShouldClose() const { return glfwWindowShouldClose(mainWindow); }
 	[[nodiscard]] int GetWidth() const { return width; }
 	[[nodiscard]] int GetHeight() const { return height; }
-	bool * GetKeys() { return key; }
+	[[nodiscard]] bool* GetKey() { return key; }
 	[[nodiscard]] float GetXChange() ;
 	[[nodiscard]] float GetYChange() ;
 	[[nodiscard]] int	GetVSyncStatus() const { return VSync; }
