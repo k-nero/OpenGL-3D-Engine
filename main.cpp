@@ -61,6 +61,11 @@ void CreateShader()
 	shaderList.push_back(shader1);
 }
 
+void DisplayError(const int code, const char* description)
+{
+	cout<< "Error: "<< code << " "  << description << endl;
+}
+
 int main()
 {
 	mainWindow = Window();
@@ -109,5 +114,6 @@ int main()
 	}
 	//clean up
 	mainWindow.~Window();
+	glfwSetErrorCallback(DisplayError);
 	return 0;
 }

@@ -2,6 +2,8 @@
 
 #include "GL/glew.h"
 #include "Window.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 using namespace std;
 
@@ -73,6 +75,7 @@ float Window::GetYChange()
 	yChange = 0.0f;
 	return delta;
 }
+
 int Window::Initialize()
 {
 	//initialize GLFW
@@ -102,6 +105,13 @@ int Window::Initialize()
 		return 1;
 	}
 
+	//set window icon
+	GLFWimage image[2];
+
+	image[0].pixels = stbi_load("icons/console-64px.png", &image[0].width, &image[0].height, nullptr, 4);
+	image[1].pixels = stbi_load("icons/console-512px.png", &image[1].width, &image[1].height, nullptr, 4);
+
+	glfwSetWindowIcon(mainWindow, 2, image);
 	//get buffer size information
 	glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHeight);
 
@@ -113,7 +123,7 @@ int Window::Initialize()
 
 	//lock mouse
 	glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
+	
 	//allow modern extension features
 	glewExperimental = GL_TRUE;
 
