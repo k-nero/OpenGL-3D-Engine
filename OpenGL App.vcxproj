@@ -108,13 +108,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\libs\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)\libs\glew-2.1.0\include;$(SolutionDir)libs\assimp\include;$(SolutionDir)libs/glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\libs\glfw-3.3.8.bin.WIN64\lib-vc2022;$(SolutionDir)\libs\glew-2.1.0\lib\Release\x64;$(SolutionDir)libs\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -125,40 +125,50 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\libs\glfw-3.3.8.bin.WIN64\include;$(SolutionDir)\libs\glew-2.1.0\include;$(SolutionDir)libs\assimp\include;$(SolutionDir)libs/glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\libs\glfw-3.3.8.bin.WIN64\lib-vc2022;$(SolutionDir)\libs\glew-2.1.0\lib\Release\x64;$(SolutionDir)libs\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="ConfigLoader.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\ConfigLoader.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\Shader.cpp" />
+    <ClCompile Include="src\Window.cpp">
+      <DeploymentContent>false</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="ConfigLoader.h" />
-    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\ConfigLoader.h" />
+    <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="src\Shader.h" />
+    <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenGL App.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.ini" />
-    <None Include="Shader\TriangleFrag.shader" />
-    <None Include="Shader\TriangleVert.shader" />
+    <None Include="Shader\FragmentShader.glsl" />
+    <None Include="Shader\VerticesShader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon\console-512px.png" />
+    <Image Include="icon\console-64px.png" />
+    <Image Include="textures\diamond.png" />
+    <Image Include="textures\obsidian.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

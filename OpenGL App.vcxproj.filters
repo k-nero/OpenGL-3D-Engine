@@ -13,47 +13,59 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Shader">
+    <Filter Include="Resource Files\Shader">
       <UniqueIdentifier>{6acac640-b5d2-4c37-9a19-0e212e834b39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\textures">
+      <UniqueIdentifier>{05d34b7d-cd0a-494d-8dba-3c501eb4fddd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\icon">
+      <UniqueIdentifier>{459b0bc1-cc11-4ef7-9d7a-1ffa93985fec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
+    <ClCompile Include="src\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
+    <ClCompile Include="src\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
+    <ClCompile Include="src\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ConfigLoader.cpp">
+    <ClCompile Include="src\ConfigLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Mesh.h">
+    <ClInclude Include="src\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Shader.h">
+    <ClInclude Include="src\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
+    <ClInclude Include="src\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="src\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ConfigLoader.h">
+    <ClInclude Include="src\ConfigLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -63,12 +75,26 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shader\TriangleFrag.shader">
-      <Filter>Shader</Filter>
+    <None Include="Shader\FragmentShader.glsl">
+      <Filter>Resource Files\Shader</Filter>
     </None>
-    <None Include="Shader\TriangleVert.shader">
-      <Filter>Shader</Filter>
+    <None Include="Shader\VerticesShader.glsl">
+      <Filter>Resource Files\Shader</Filter>
     </None>
     <None Include="config.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\diamond.png">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="textures\obsidian.png">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="icon\console-512px.png">
+      <Filter>Resource Files\icon</Filter>
+    </Image>
+    <Image Include="icon\console-64px.png">
+      <Filter>Resource Files\icon</Filter>
+    </Image>
   </ItemGroup>
 </Project>
