@@ -13,6 +13,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Texture.h"
+#include "Light.h"
 
 using namespace std;
 using namespace glm;
@@ -23,6 +24,8 @@ vector<Mesh*> meshList;
 vector<Shader*> shaderList;
 
 Texture obsidian;
+
+Light mainLight;
 
 float deltaTime = 0.0f;
 float lastTime = 0.0f;
@@ -89,7 +92,7 @@ void CreateShader()
 int main()
 {
 	mainWindow = Window();
-	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 1.0f, 0.5f);
+	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 2.0f, 0.5f);
 	mainWindow.Initialize();
 
 	CreateObject();
@@ -97,10 +100,14 @@ int main()
 
 	obsidian = Texture("textures/diamond.png");
 	obsidian.LoadTexture();
+
+	mainLight = Light(1.0f, 1.0f, 1.0f, 1.0f);
+
 	//Loop until window closed
 	while (!mainWindow.GetShouldClose())
 	{
 		glfwPollEvents();
+
 		if (!glfwGetWindowAttrib(mainWindow.GetWindow(), GLFW_ICONIFIED))
 		{
 			const auto now = static_cast<float>(glfwGetTime());
@@ -114,6 +121,10 @@ int main()
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			shaderList[0]->UseShader();
+
+			const auto uniformAmbientColour = static_cast<float>(shaderList[0]->GetAmbientColourLocation());
+			const auto uniformAmbientIntensity = static_cast<float>(shaderList[0]->GetAmbientIntensityLocation());
+			mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColour);
 
 			const float tmp = static_cast<float>(mainWindow.GetWidth()) / static_cast<float>(mainWindow.GetHeight());
 			float aspect = 1;
