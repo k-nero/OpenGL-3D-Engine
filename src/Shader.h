@@ -14,6 +14,8 @@ public:
 	[[nodiscard]] int GetProjectionLocation() const;
 	[[nodiscard]] int GetModelLocation() const;
 	[[nodiscard]] int GetViewLocation() const;
+	[[nodiscard]] int GetAmbientIntensityLocation() const;
+	[[nodiscard]] int GetAmbientColourLocation() const;
 	void UseShader() const;
 	void ClearShader();
 	~Shader();
@@ -22,6 +24,8 @@ private:
 	int uniformProjection = 0;
 	int uniformModel = 0;
 	int uniformView = 0;
+	int uniformAmbientIntensity = 0;
+	int uniformAmbientColour = 0;
 
 	void CompileShader(const char* vertexCode, const char* fragmentCode);
 	static void AddShader(unsigned int theProgram, const char* shaderCode, unsigned int shaderType);
