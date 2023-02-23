@@ -23,7 +23,7 @@ Camera camera;
 vector<Mesh*> meshList;
 vector<Shader*> shaderList;
 
-Texture obsidian;
+Texture diamondTexture;
 
 Light mainLight;
 
@@ -31,8 +31,8 @@ float deltaTime = 0.0f;
 float lastTime = 0.0f;
 
 //Fragment Shader
-static const char* vShaderLocation = "Shader/VerticesShader.glsl";
-static const char* fShaderSLocation = "Shader/FragmentShader.glsl";
+static string vShaderLocation = "Shader/VerticesShader.glsl";
+static string fShaderSLocation = "Shader/FragmentShader.glsl";
 
 double Radiants(const double degrees)
 {
@@ -69,7 +69,7 @@ void CreateObject()
 	constexpr float vertices[] = {
 		-1, -1,  1, 0, 0,//0
          1, -1,  1, 1, 0,//1
-        -1,  1,  1, 0, 1, //2
+        -1,  1,  1, 0, 1,//2
          1,  1,  1, 1, 1,//3
         -1, -1, -1, 1, 0,//4
          1, -1, -1, 0, 0,//5
@@ -80,6 +80,10 @@ void CreateObject()
 	auto* obj1 = new Mesh();
 	obj1->CreateMesh(vertices, indices, 40, 36);
 	meshList.push_back(obj1);
+
+	auto* obj2 = new Mesh();
+	obj2->CreateMesh(vertices, indices, 40, 36);
+	meshList.push_back(obj2);
 }
 
 void CreateShader()
@@ -98,8 +102,8 @@ int main()
 	CreateObject();
 	CreateShader();
 
-	obsidian = Texture("textures/diamond.png");
-	obsidian.LoadTexture();
+	diamondTexture = Texture("textures/diamond.png");
+	diamondTexture.LoadTexture();
 
 	mainLight = Light(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -145,9 +149,16 @@ int main()
 			const int uniformModel = shaderList[0]->GetModelLocation();
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, value_ptr(model));
 
-			obsidian.UseTexture();
+			diamondTexture.UseTexture();
 
 			meshList[0]->RenderMesh();
+
+			model = translate(model, vec3(0.0f, 0.0f, -4.5f));
+			model = rotate(model, static_cast<float>(Radiants(0)), vec3(0.0f, 1.0f, 0.0f));
+			model = scale(model, vec3(1.0f, 1.0f, 1.0f));
+			glUniformMatrix4fv(shaderList[0]->GetModelLocation(), 1, GL_FALSE, value_ptr(model));
+
+			meshList[1]->RenderMesh();
 
 			glUseProgram(NULL);
 			mainWindow.SwapBuffers();

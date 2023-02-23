@@ -9,7 +9,7 @@ class Shader
 public:
 	Shader();
 	void CreateFromString(const char* vertexCode, const char* fragmentCode);
-	void CreateFromFile(const char* vertexLocation, const char* fragmentLocation);
+	void CreateFromFile(const string& vertexLocation, const string& fragmentLocation);
 	string ReadFile(const char* fileLocation) const;
 	[[nodiscard]] int GetProjectionLocation() const;
 	[[nodiscard]] int GetModelLocation() const;
