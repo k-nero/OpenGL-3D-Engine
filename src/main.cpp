@@ -66,7 +66,7 @@ void CreateObject()
 	constexpr float vertices[] = {
 		-1, -1,  1, 0, 0,//0
          1, -1,  1, 1, 0,//1
-        -1,  1,  1, 0, 1, //2
+        -1,  1,  1, 0, 1,//2
          1,  1,  1, 1, 1,//3
         -1, -1, -1, 1, 0,//4
          1, -1, -1, 0, 0,//5
@@ -106,7 +106,6 @@ int main()
 			const auto now = static_cast<float>(glfwGetTime());
 			deltaTime = now - lastTime;
 			lastTime = now;
-
 
 			camera.KeyControl(mainWindow.GetKey(), deltaTime);
 			camera.MouseControl(mainWindow.GetXChange(), mainWindow.GetYChange());

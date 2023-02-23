@@ -34,6 +34,8 @@ void Texture::LoadTexture()
 		return;
 	}
 
+	glGenerateMipmap(GL_TEXTURE_2D);
+
 	glGenTextures(1, &TextureID);
 	glBindTexture(GL_TEXTURE_2D, TextureID);
 
