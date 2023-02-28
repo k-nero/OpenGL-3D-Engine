@@ -7,13 +7,16 @@ class Light
 {
 public:
 	Light();
-	Light(float red, float green, float blue, float aIntensity/*, float dIntensity*/);
+	Light(float red, float green, float blue, float aIntensity, float xDir, float yDir, float zDir ,float dIntensity);
 
-	void UseLight(float ambientIntensityLocation, float ambientColourLocation/*, float diffuseIntensityLocation, float directionLocation*/) const;
+	void UseLight(int ambientIntensityLocation, int ambientColorLocation, int diffuseIntensityLocation, int directionLocation) const;
 
 	~Light();
 private:
-	vec3 colour;
+	vec3 color;
 	float ambientIntensity;
+
+	vec3 direction;
+	float diffuseIntensity;
 };
 

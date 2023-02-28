@@ -17,19 +17,19 @@ public:
 	[[nodiscard]] bool* GetKey() { return key; }
 	[[nodiscard]] float GetXChange() ;
 	[[nodiscard]] float GetYChange() ;
-	[[nodiscard]] int	GetVSyncStatus() const { return VSync; }
-	void SetVSyncStatus(const int status) { VSync = status; }
+	[[nodiscard]] int	GetVSyncStatus() const { return vSync; }
+	[[nodiscard]] GLFWwindow* GetWindow() const { return mainWindow; }
+	void SetVSyncStatus(const int status) { vSync = status; }
 	void SwapBuffers() const { glfwSwapBuffers(mainWindow); }
 	void SetShouldClose() const { glfwSetWindowShouldClose(mainWindow, GL_TRUE); }
-	GLFWwindow* GetWindow() const { return mainWindow; }
-	static void DisplayError(const int code, const char* description);
+	static void DisplayError( int code, const char* description);
 	~Window();
 private:
 	GLFWwindow* mainWindow = nullptr;
 	int width, height;
 	int bufferWidth = 0, bufferHeight = 0;
 
-	int VSync = GLFW_TRUE;
+	int vSync = GLFW_TRUE;
 
 	bool key[1024] = {};
 

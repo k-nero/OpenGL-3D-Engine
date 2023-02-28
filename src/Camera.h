@@ -13,6 +13,8 @@ public:
 	void KeyControl(bool* keys, float deltaTime);
 	void MouseControl(float xChange, float yChange);
 	[[nodiscard]] mat4 CalculateViewMatrix() const;
+	[[nodiscard]] vec3 GetCameraPosition() const;
+	[[nodiscard]] vec3 GetCameraDirection() const;
 	~Camera();
 private:
 	vec3 cameraPos = vec3();

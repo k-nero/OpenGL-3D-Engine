@@ -14,6 +14,7 @@
 #include "Camera.h"
 #include "Texture.h"
 #include "Light.h"
+#include "Material.h"
 
 using namespace std;
 using namespace glm;
@@ -24,7 +25,8 @@ vector<Mesh*> meshList;
 vector<Shader*> shaderList;
 
 Texture diamondTexture;
-
+Material shinyMaterial;
+Material dullMaterial;
 Light mainLight;
 
 float deltaTime = 0.0f;
@@ -37,6 +39,51 @@ static string fShaderSLocation = "Shader/FragmentShader.glsl";
 double Radiants(const double degrees)
 {
 	return degrees * 3.14159265358979323846 / 180.0;
+}
+
+void CalAverageNormal(const unsigned int * indice, const unsigned int count, float * vertices, const unsigned int verticeCount, const unsigned int vLength, const unsigned int normalOffset)
+{
+	for (size_t i = 0; i < count; i += 3)
+	{
+		unsigned int in0 = indice[i] * vLength;
+		unsigned int in1 = indice[i + 1] * vLength;
+		unsigned int in2 = indice[i + 2] * vLength;
+
+		vec3 v1(vertices[in1] - vertices[in0], vertices[in1 + 1] - vertices[in0 + 1], vertices[in1 + 2] - vertices[in0 + 2]);
+		vec3 v2(vertices[in2] - vertices[in0], vertices[in2 + 1] - vertices[in0 + 1], vertices[in2 + 2] - vertices[in0 + 2]);
+
+		const vec3 normal = normalize(cross(v1, v2));
+
+		in0 += normalOffset;
+		in1 += normalOffset;
+		in2 += normalOffset;
+
+		vertices[in0] += normal.x;
+		vertices[in0 + 1] += normal.y;
+		vertices[in0 + 2] += normal.z;
+
+		vertices[in1] += normal.x;
+		vertices[in1 + 1] += normal.y;
+		vertices[in1 + 2] += normal.z;
+
+		vertices[in2] += normal.x;
+		vertices[in2 + 1] += normal.y;
+		vertices[in2 + 2] += normal.z;
+	}
+
+	for (size_t i = 0; i < verticeCount / vLength; i++)
+	{
+		const auto nOffset = static_cast<unsigned int>(i * vLength + normalOffset);
+		vec3 vec(vertices[nOffset], vertices[nOffset + 1], vertices[nOffset + 2]);
+		vec = normalize(vec);
+		if(isnan(vec.x) || isnan(vec.y) || isnan(vec.z))
+		{
+			vec = vec3(0.0f, 0.0f, 0.0f);
+		}
+		vertices[nOffset] = vec.x;
+		vertices[nOffset + 1] = vec.y;
+		vertices[nOffset + 2] = vec.z;
+	}
 }
 
 void CreateObject()
@@ -66,23 +113,25 @@ void CreateObject()
 		4, 5, 7
 	};
 
-	constexpr float vertices[] = {
-		-1, -1,  1, 0, 0,//0
-         1, -1,  1, 1, 0,//1
-        -1,  1,  1, 0, 1,//2
-         1,  1,  1, 1, 1,//3
-        -1, -1, -1, 1, 0,//4
-         1, -1, -1, 0, 0,//5
-        -1,  1, -1, 1, 1,//6
-         1,  1, -1, 0, 1,//7
+	float vertices[] = {
+		-1, -1, 1,	 0, 0,	0.0f, 0.0f, 0.0f,//0
+         1, -1, 1,	 1, 0,	0.0f, 0.0f, 0.0f,//1
+        -1,  1, 1,	 0, 1,	0.0f, 0.0f, 0.0f,//2
+         1,  1, 1,	 1, 1,	0.0f, 0.0f, 0.0f,//3
+        -1, -1,-1,	 1, 0,	0.0f, 0.0f, 0.0f,//4
+         1, -1,-1,	 0, 0,	0.0f, 0.0f, 0.0f,//5
+        -1,  1,-1,	 1, 1,	0.0f, 0.0f, 0.0f,//6
+         1,  1,-1,	 0, 1,	0.0f, 0.0f, 0.0f,//7
 	};
 
+	CalAverageNormal(indices, 36, vertices, 64, 8, 5);
+
 	auto* obj1 = new Mesh();
-	obj1->CreateMesh(vertices, indices, 40, 36);
+	obj1->CreateMesh(vertices, indices, 64, 36);
 	meshList.push_back(obj1);
 
 	auto* obj2 = new Mesh();
-	obj2->CreateMesh(vertices, indices, 40, 36);
+	obj2->CreateMesh(vertices, indices, 64, 36);
 	meshList.push_back(obj2);
 }
 
@@ -103,9 +152,12 @@ int main()
 	CreateShader();
 
 	diamondTexture = Texture("textures/diamond.png");
-	diamondTexture.LoadTexture();
+	diamondTexture.LoadTextureAlpha();
 
-	mainLight = Light(1.0f, 1.0f, 1.0f, 1.0f);
+	shinyMaterial = Material(1.0f, 32);
+	dullMaterial = Material(0.3f, 4);
+
+	mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 2.0f, -1.0f, -2.0f, 0.3f);
 
 	//Loop until window closed
 	while (!mainWindow.GetShouldClose())
@@ -126,18 +178,24 @@ int main()
 
 			shaderList[0]->UseShader();
 
-			const auto uniformAmbientColour = static_cast<float>(shaderList[0]->GetAmbientColourLocation());
-			const auto uniformAmbientIntensity = static_cast<float>(shaderList[0]->GetAmbientIntensityLocation());
-			mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColour);
+			const auto uniformAmbientColor = (shaderList[0]->GetAmbientColorLocation());
+			const auto uniformAmbientIntensity = (shaderList[0]->GetAmbientIntensityLocation());
+			const auto uniformDirection = (shaderList[0]->GetDirectionLocation());
+			const auto uniformDiffuseIntensity = (shaderList[0]->GetDiffuseIntensityLocation());
+			const auto uniformCameraPos = (shaderList[0]->GetCameraPosLocation());
+			const auto uniformSpecularIntensity = (shaderList[0]->GetSpecularIntensityLocation());
+			const auto uniformShininess = (shaderList[0]->GetShininessLocation());
+			mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColor, uniformDiffuseIntensity, uniformDirection);
 
 			const float tmp = static_cast<float>(mainWindow.GetWidth()) / static_cast<float>(mainWindow.GetHeight());
 			float aspect = 1;
 			aspect = (isnan(tmp)) ? aspect : tmp;
 
+			glUniform3f(uniformCameraPos, camera.GetCameraPosition().x, camera.GetCameraPosition().y, camera.GetCameraPosition().z);
+
 			mat4 projection = perspective(45.0f, aspect, 0.1f, 100.0f);
 			const int uniformProjection = shaderList[0]->GetProjectionLocation();
 			glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, value_ptr(projection));
-
 			mat4 view = camera.CalculateViewMatrix();
 			const int uniformView = shaderList[0]->GetViewLocation();
 			glUniformMatrix4fv(uniformView, 1, GL_FALSE, value_ptr(view));
@@ -145,19 +203,16 @@ int main()
 			auto model = mat4(1.0f);
 			model = translate(model, vec3(0.0f, 0.0f, -2.5f));
 			model = rotate(model, static_cast<float>(Radiants(0)), vec3(0.0f, 1.0f, 0.0f));
-			model = scale(model, vec3(1.0f, 1.0f, 1.0f));
 			const int uniformModel = shaderList[0]->GetModelLocation();
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, value_ptr(model));
-
 			diamondTexture.UseTexture();
-
+			shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 			meshList[0]->RenderMesh();
 
 			model = translate(model, vec3(0.0f, 0.0f, -4.5f));
 			model = rotate(model, static_cast<float>(Radiants(0)), vec3(0.0f, 1.0f, 0.0f));
-			model = scale(model, vec3(1.0f, 1.0f, 1.0f));
 			glUniformMatrix4fv(shaderList[0]->GetModelLocation(), 1, GL_FALSE, value_ptr(model));
-
+			dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 			meshList[1]->RenderMesh();
 
 			glUseProgram(NULL);

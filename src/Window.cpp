@@ -82,8 +82,10 @@ float Window::GetYChange()
 	return delta;
 }
 
+
 int Window::Initialize()
 {
+	
 	//initialize GLFW
 	if (glfwInit() == GL_FALSE)
 	{
@@ -95,7 +97,7 @@ int Window::Initialize()
 	//setup GLFW window properties
 	//OpenGL version
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 
 	//Core profile = No Backwards Compatibility
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);

@@ -19,6 +19,16 @@ Camera::Camera(vec3 initCameraPos, vec3 initUp, float initYaw, float initPitch, 
 	Update();
 }
 
+vec3 Camera::GetCameraDirection() const
+{
+	return front;
+}
+
+vec3 Camera::GetCameraPosition() const
+{
+	return cameraPos;
+}
+
 void Camera::KeyControl(bool* keys, float deltaTime)
 {
 	const float velocity = movementSpeed * deltaTime;
