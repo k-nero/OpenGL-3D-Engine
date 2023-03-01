@@ -89,7 +89,7 @@ void Model::LoadMesh(const aiMesh* mesh, const aiScene* scene)
 		{
 			vertices.insert(vertices.end(), { 0.0f, 0.0f });
 		}
-		vertices.insert(vertices.end(), { mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z });
+		vertices.insert(vertices.end(), { -mesh->mNormals[i].x, -mesh->mNormals[i].y, -mesh->mNormals[i].z });
 	}
 
 	for (size_t i = 0; i < mesh->mNumFaces; i++)
@@ -121,7 +121,7 @@ void Model::LoadMaterial(const aiScene * scene)
 			{
 				const int idx = string(path.data).rfind('\\');
 				string filename = string(path.data).substr(idx + 1);
-				string texPath = string("Textures/") + filename;
+				string texPath = string("textures/") + filename;
 				textureList[i] = new Texture(texPath.c_str());
 				if (!textureList[i]->LoadTexture())
 				{
@@ -131,9 +131,13 @@ void Model::LoadMaterial(const aiScene * scene)
 				}
 			}
 		}
+		else
+		{
+			cout << "No texture found for material " << i << endl;
+		}
 		if (!textureList[i])
 		{
-			textureList[i] = new Texture("Textures/plain.png");
+			textureList[i] = new Texture("textures/diamond.png");
 			textureList[i]->LoadTextureAlpha();
 		}
 	}

@@ -10,7 +10,7 @@ Mesh::Mesh()
 	indexCount = 0;
 }
 
-void Mesh::CreateMesh(const float* vertices, const unsigned int* indices, unsigned int numOfVertices, int numOfIndices)
+void Mesh::CreateMesh(const float* vertices, const unsigned int* indices, int numOfVertices, int numOfIndices)
 {
 	indexCount = numOfIndices;
 

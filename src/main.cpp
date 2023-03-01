@@ -15,6 +15,7 @@
 #include "Texture.h"
 #include "Light.h"
 #include "Material.h"
+#include "Model.h"
 
 using namespace std;
 using namespace glm;
@@ -28,6 +29,8 @@ Texture diamondTexture;
 Material shinyMaterial;
 Material dullMaterial;
 Light mainLight;
+
+Model Model3D;
 
 float deltaTime = 0.0f;
 float lastTime = 0.0f;
@@ -145,7 +148,7 @@ void CreateShader()
 int main()
 {
 	mainWindow = Window();
-	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 2.0f, 0.5f);
+	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.5f);
 	mainWindow.Initialize();
 
 	CreateObject();
@@ -156,6 +159,9 @@ int main()
 
 	shinyMaterial = Material(1.0f, 32);
 	dullMaterial = Material(0.3f, 4);
+
+	Model3D = Model();
+	Model3D.LoadModel("models/room.obj");
 
 	mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 2.0f, -1.0f, -2.0f, 0.3f);
 
@@ -214,6 +220,12 @@ int main()
 			glUniformMatrix4fv(shaderList[0]->GetModelLocation(), 1, GL_FALSE, value_ptr(model));
 			dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 			meshList[1]->RenderMesh();
+
+			model = translate(model, vec3(0.0f, 5.0f, -0.0f));
+			model = rotate(model, static_cast<float>(Radiants(0)), vec3(0.0f, 1.0f, 0.0f));
+			glUniformMatrix4fv(shaderList[0]->GetModelLocation(), 1, GL_FALSE, value_ptr(model));
+			dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			Model3D.RenderModel(); 
 
 			glUseProgram(NULL);
 			mainWindow.SwapBuffers();
