@@ -22,6 +22,9 @@
     <Filter Include="Resource Files\icon">
       <UniqueIdentifier>{459b0bc1-cc11-4ef7-9d7a-1ffa93985fec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Models">
+      <UniqueIdentifier>{c27093ab-87c4-4566-9624-5f7cccd0537f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -100,12 +103,12 @@
       <Filter>Resource Files\Shader</Filter>
     </None>
     <None Include="config.ini" />
+    <None Include="models\combined02.mtl">
+      <Filter>Resource Files\Models</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\diamond.png">
-      <Filter>Resource Files\textures</Filter>
-    </Image>
-    <Image Include="textures\obsidian.png">
       <Filter>Resource Files\textures</Filter>
     </Image>
     <Image Include="icon\console-512px.png">
@@ -114,5 +117,25 @@
     <Image Include="icon\console-64px.png">
       <Filter>Resource Files\icon</Filter>
     </Image>
+    <Image Include="textures\base_diff.jpg">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="textures\transparent_alpha.jpg">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="textures\transparent_diff.jpg">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="textures\transparent_norm.jpg">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="textures\transparent_spec.jpg">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="models\combined02.obj">
+      <Filter>Resource Files\Models</Filter>
+    </Object>
   </ItemGroup>
 </Project>

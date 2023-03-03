@@ -30,7 +30,7 @@ bool Texture::LoadTextureAlpha()
 	unsigned char* textData = stbi_load(fileLocation, &width, &height, &bitDepth, 0);
 	if(!textData)
 	{
-		cout << "Failed to load: %s\n" << fileLocation << endl;
+		cout << "Failed to load: " << fileLocation << endl;
 		return false;
 	}
 
@@ -58,7 +58,7 @@ bool Texture::LoadTexture()
 	unsigned char* textData = stbi_load(fileLocation, &width, &height, &bitDepth, 0);
 	if (!textData)
 	{
-		cout << "Failed to load: %s\n" << fileLocation << endl;
+		cout << "Failed to load: " << fileLocation << endl;
 		return false;
 	}
 
@@ -85,7 +85,6 @@ void Texture::UseTexture() const
 {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, TextureID);
-
 }
 
 void Texture::ClearTexture()

@@ -148,7 +148,7 @@ void CreateShader()
 int main()
 {
 	mainWindow = Window();
-	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.5f);
+	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 100.0f, 0.5f);
 	mainWindow.Initialize();
 
 	CreateObject();
@@ -161,9 +161,9 @@ int main()
 	dullMaterial = Material(0.3f, 4);
 
 	Model3D = Model();
-	Model3D.LoadModel("models/room.obj");
+	Model3D.LoadModel("models/combined02.obj");
 
-	mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 2.0f, -1.0f, -2.0f, 0.3f);
+	mainLight = Light(1.0f, 1.0f, 1.0f, 1.0f, 2.0f, -1.0f, -2.0f, 0.3f);
 
 	//Loop until window closed
 	while (!mainWindow.GetShouldClose())
@@ -199,7 +199,7 @@ int main()
 
 			glUniform3f(uniformCameraPos, camera.GetCameraPosition().x, camera.GetCameraPosition().y, camera.GetCameraPosition().z);
 
-			mat4 projection = perspective(45.0f, aspect, 0.1f, 100.0f);
+			mat4 projection = perspective(45.0f, aspect, 0.1f, 2000.0f);
 			const int uniformProjection = shaderList[0]->GetProjectionLocation();
 			glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, value_ptr(projection));
 			mat4 view = camera.CalculateViewMatrix();
