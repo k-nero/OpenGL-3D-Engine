@@ -30,4 +30,4 @@ newmtl transparent
 	map_Kd transparent_diff.jpg
 	map_Ks transparent_spec.jpg
 	map_d transparent_alpha.jpg
-	bump transparent_norm.jpg
+	map_Bump transparent_norm.jpg

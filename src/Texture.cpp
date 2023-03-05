@@ -4,7 +4,6 @@
 #include <stb_image.h>
 #include <GL/glew.h>
 
-
 using namespace std;
 
 Texture::Texture()
@@ -16,13 +15,14 @@ Texture::Texture()
 	fileLocation = nullptr;
 }
 
-Texture::Texture(const char* fileLoc)
+Texture::Texture(const char* fileLoc, bool flipTexture = false)
 {
 	TextureID = 0;
 	width = 0;
 	height = 0;
 	bitDepth = 0;
 	fileLocation = const_cast<char*>(fileLoc);
+	stbi_set_flip_vertically_on_load(flipTexture);
 }
 
 bool Texture::LoadTextureAlpha()
@@ -34,20 +34,18 @@ bool Texture::LoadTextureAlpha()
 		return false;
 	}
 
-	glGenerateMipmap(GL_TEXTURE_2D);
+	glCreateTextures(GL_TEXTURE_2D, 1, &TextureID);
 
-	glGenTextures(1, &TextureID);
-	glBindTexture(GL_TEXTURE_2D, TextureID);
+	glTextureParameteri(TextureID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTextureParameteri(TextureID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTextureParameteri(TextureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTextureParameteri(TextureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTextureStorage2D(TextureID, 1, GL_RGBA8, width, height);
+	glTextureSubImage2D(TextureID, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, textData);
+	glGenerateTextureMipmap(TextureID);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textData);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	glBindTexture(GL_TEXTURE_2D, NULL);
+	glBindTextureUnit(0, TextureID);
 	stbi_image_free(textData);
 
 	return true;
@@ -61,21 +59,21 @@ bool Texture::LoadTexture()
 		cout << "Failed to load: " << fileLocation << endl;
 		return false;
 	}
+	stbi_set_flip_vertically_on_load(0);
 
-	glGenerateMipmap(GL_TEXTURE_2D);
+	glCreateTextures(GL_TEXTURE_2D, 1, &TextureID);
 
-	glGenTextures(1, &TextureID);
-	glBindTexture(GL_TEXTURE_2D, TextureID);
+	glTextureParameteri(TextureID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTextureParameteri(TextureID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTextureParameteri(TextureID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTextureParameteri(TextureID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTextureStorage2D(TextureID, 1, GL_RGBA8, width, height);
+	glTextureSubImage2D(TextureID, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, textData);
+	glGenerateTextureMipmap(TextureID);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, textData);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	glBindTexture(GL_TEXTURE_2D, NULL);
+	glBindTextureUnit(0, TextureID);
+	glBindTexture(GL_TEXTURE_2D, 0);
 	stbi_image_free(textData);
 
 	return true;
@@ -83,10 +81,8 @@ bool Texture::LoadTexture()
 
 void Texture::UseTexture() const
 {
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, TextureID);
+	glBindTextureUnit(0, TextureID);
 }
-
 void Texture::ClearTexture()
 {
 	glDeleteTextures(1, &TextureID);

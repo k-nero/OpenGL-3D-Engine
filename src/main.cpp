@@ -154,14 +154,14 @@ int main()
 	CreateObject();
 	CreateShader();
 
-	diamondTexture = Texture("textures/diamond.png");
+	diamondTexture = Texture("textures/diamond.png", false);
 	diamondTexture.LoadTextureAlpha();
 
 	shinyMaterial = Material(1.0f, 32);
 	dullMaterial = Material(0.3f, 4);
 
 	Model3D = Model();
-	Model3D.LoadModel("models/combined02.obj");
+	Model3D.LoadModel("models/backpack.obj");
 
 	mainLight = Light(1.0f, 1.0f, 1.0f, 1.0f, 2.0f, -1.0f, -2.0f, 0.3f);
 

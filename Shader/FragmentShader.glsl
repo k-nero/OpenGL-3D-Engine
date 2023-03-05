@@ -5,7 +5,7 @@ in vec2 vTex;
 in vec3 Normal;
 in vec3 FragPos;
 
-out vec4 color;
+layout (location = 0) out vec4 color;
 
 struct Material
 {
@@ -23,7 +23,9 @@ struct DirectionalLight
 
 uniform DirectionalLight directionalLight;
 uniform Material material;
-uniform sampler2D texture_diffuse;
+layout (binding = 0) uniform sampler2D texture_diffuse;
+layout (binding = 1) uniform sampler2D texture_specular;
+layout (binding = 2) uniform sampler2D texture_normal;
 
 uniform vec3 cameraPos;
 
@@ -45,5 +47,5 @@ void main()
 			specularColor = vec4(directionalLight.color, 1.0) * material.specularIntensity * spec;
 		}
 	}
-	color = texture(texture_diffuse, vTex) * (ambientColor + diffuseColor + specularColor);
+	color = texture2D(texture_diffuse, vTex) * (ambientColor + diffuseColor + specularColor);
 }

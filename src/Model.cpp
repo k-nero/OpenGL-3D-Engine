@@ -122,7 +122,7 @@ void Model::LoadMaterial(const aiScene * scene)
 				const int idx = string(path.data).rfind('\\');
 				string filename = string(path.data).substr(idx + 1);
 				string texPath = string("textures/") + filename;
-				textureList[i] = new Texture(texPath.c_str());
+				textureList[i] = new Texture(texPath.c_str(), true);
 				if (!textureList[i]->LoadTexture())
 				{
 					cout << "Failed to load texture at: " << texPath << endl;
@@ -131,13 +131,22 @@ void Model::LoadMaterial(const aiScene * scene)
 				}
 			}
 		}
-		else
+		if(material->GetTextureCount(aiTextureType_SPECULAR))
 		{
-			cout << "No texture found for material " << i << endl;
+			cout << "Specular texture found!!!"  << endl;
 		}
+		if (material->GetTextureCount(aiTextureType_NORMALS))
+		{
+			cout << "Normal texture found!!!" << endl;
+		}
+		if (material->GetTextureCount(aiTextureType_OPACITY))
+		{
+			cout << "Alpha texture found!!!" << endl;
+		}
+
 		if (!textureList[i])
 		{
-			textureList[i] = new Texture("textures/diamond.png");
+			textureList[i] = new Texture("textures/diamond.png", true);
 			textureList[i]->LoadTextureAlpha();
 		}
 	}

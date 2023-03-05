@@ -3,7 +3,7 @@ class Texture
 {
 public:
 	Texture();
-	Texture(const char* fileLoc);
+	Texture(const char* fileLoc, bool flipTexture);
 
 	bool LoadTexture();
 	bool LoadTextureAlpha();
