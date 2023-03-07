@@ -9,7 +9,7 @@ public:
 
 	bool LoadTexture();
 	[[nodiscard]] string GetTextureType() const { return type; }
-	[[nodiscard]] unsigned int GetTextureID() const { return TextureID; }
+	[[nodiscard]] unsigned int GetTextureID() const { return textureId; }
 	[[nodiscard]] char * GetFileLocation() const { return fileLocation; }
 	void SetTextureType(const string& type) { this->type = type; }
 	void UseTexture(unsigned unit) const;
@@ -17,7 +17,7 @@ public:
 
 	//~Texture() { ClearTexture(); }
 private:
-	unsigned int TextureID;
+	unsigned int textureId;
 	int width, height, bitDepth;
 
 	char * fileLocation;

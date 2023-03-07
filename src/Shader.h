@@ -24,7 +24,7 @@ public:
 	[[nodiscard]] int getShaderIdI() const { return shaderId; }
 	void UseShader() const;
 	void ClearShader();
-	~Shader();
+	~Shader() { ClearShader(); } 
 private:
 	int shaderId = 0;
 	int uniformProjection = 0;

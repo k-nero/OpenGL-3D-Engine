@@ -3,7 +3,9 @@
 
 #include "Shader.h"
 #include "Texture.h"
+
 using namespace std;
+
 class Mesh
 {
 public:

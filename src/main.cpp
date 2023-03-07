@@ -44,13 +44,13 @@ double Radiants(const double degrees)
 	return degrees * 3.14159265358979323846 / 180.0;
 }
 
-void CalAverageNormal(const unsigned int * indice, const unsigned int count, float * vertices, const unsigned int verticeCount, const unsigned int vLength, const unsigned int normalOffset)
+void CalAverageNormal(const unsigned int * indices, const unsigned int count, float * vertices, const unsigned int verticesCount, const unsigned int vLength, const unsigned int normalOffset)
 {
 	for (size_t i = 0; i < count; i += 3)
 	{
-		unsigned int in0 = indice[i] * vLength;
-		unsigned int in1 = indice[i + 1] * vLength;
-		unsigned int in2 = indice[i + 2] * vLength;
+		unsigned int in0 = indices[i] * vLength;
+		unsigned int in1 = indices[i + 1] * vLength;
+		unsigned int in2 = indices[i + 2] * vLength;
 
 		vec3 v1(vertices[in1] - vertices[in0], vertices[in1 + 1] - vertices[in0 + 1], vertices[in1 + 2] - vertices[in0 + 2]);
 		vec3 v2(vertices[in2] - vertices[in0], vertices[in2 + 1] - vertices[in0 + 1], vertices[in2 + 2] - vertices[in0 + 2]);
@@ -74,7 +74,7 @@ void CalAverageNormal(const unsigned int * indice, const unsigned int count, flo
 		vertices[in2 + 2] += normal.z;
 	}
 
-	for (size_t i = 0; i < verticeCount / vLength; i++)
+	for (size_t i = 0; i < verticesCount / vLength; i++)
 	{
 		const auto nOffset = static_cast<unsigned int>(i * vLength + normalOffset);
 		vec3 vec(vertices[nOffset], vertices[nOffset + 1], vertices[nOffset + 2]);
@@ -148,7 +148,7 @@ void CreateShader()
 int main()
 {
 	mainWindow = Window();
-	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.5f);
+	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 100.0f, 0.5f);
 	mainWindow.Initialize();
 
 	CreateObject();
@@ -172,9 +172,9 @@ int main()
 	dullMaterial = Material(0.3f, 4);
 
 	Model3D = Model();
-	Model3D.LoadModel("models/backpack.obj");
+	Model3D.LoadModel("models/Mineways2Skfb.obj");
 
-	mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 2.0f, -1.0f, -2.0f, 1.0f);
+	mainLight = Light(1.0f, 1.0f, 1.0f, 0.1f, 10.0f, -3.0f, -5.0f, 1.0f);
 
 	//Loop until window closed
 	while (!mainWindow.GetShouldClose())
@@ -192,8 +192,10 @@ int main()
 
 			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-			shaderList[0]->UseShader();
+			for (const auto shader : shaderList)
+			{
+				shader->UseShader();
+			}
 
 			const auto uniformAmbientColor = (shaderList[0]->GetAmbientColorLocation());
 			const auto uniformAmbientIntensity = (shaderList[0]->GetAmbientIntensityLocation());
@@ -233,6 +235,7 @@ int main()
 
 			model = translate(model, vec3(0.0f, 5.0f, -0.0f));
 			model = rotate(model, static_cast<float>(Radiants(0)), vec3(0.0f, 1.0f, 0.0f));
+			model = scale(model, vec3(500.0f, 500.0f, 500.0f));
 			glUniformMatrix4fv(shaderList[0]->GetModelLocation(), 1, GL_FALSE, value_ptr(model));
 			dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 			Model3D.RenderModel(*shaderList[0]);

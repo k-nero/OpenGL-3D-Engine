@@ -102,8 +102,8 @@ Mesh * Model::LoadMesh(const aiMesh* mesh, const aiScene* scene)
 		}
 	}
 
-	
-	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+	const aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 	// we assume a convention for sampler names in the shaders. Each diffuse texture should be named
 	// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
 	// Same applies to other texture as the following list summarizes:
@@ -153,7 +153,7 @@ vector<Texture> Model::LoadMaterial(const aiMaterial * material, const aiTexture
 		}
 		if (!skip)
 		{   // if texture hasn't been loaded already, load it
-			Texture texture(pathData, true);
+			Texture texture(pathData, false);
 			texture.SetTextureType(typeName);
 			cout << "Loading texture " << pathData << endl;
 			texture.LoadTexture();

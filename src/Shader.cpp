@@ -179,7 +179,3 @@ void Shader::AddShader(unsigned int theProgram, const char* shaderCode, unsigned
 	glAttachShader(theProgram, theShader);
 }
 
-Shader::~Shader()
-{
-	ClearShader();
-}

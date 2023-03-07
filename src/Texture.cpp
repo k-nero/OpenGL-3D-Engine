@@ -8,16 +8,16 @@ using namespace std;
 
 Texture::Texture()
 {
-	TextureID = 0;
+	textureId = 0;
 	width = 0;
 	height = 0;
 	bitDepth = 0;
 	fileLocation = nullptr;
 }
 
-Texture::Texture( char* fileLoc, bool flipTexture = false)
+Texture::Texture( char* fileLoc, const bool flipTexture = false)
 {
-	TextureID = 0;
+	textureId = 0;
 	width = 0;
 	height = 0;
 	bitDepth = 0;
@@ -34,7 +34,7 @@ bool Texture::LoadTexture()
 		return false;
 	}
 
-	GLenum format = GL_RGB;
+	unsigned int format = GL_RGB;
 	if(bitDepth == 1)
 	{
 		format = GL_RED;
@@ -48,32 +48,33 @@ bool Texture::LoadTexture()
 		format = GL_RGBA;
 	}
 
-	glCreateTextures(GL_TEXTURE_2D, 1, &TextureID);
+	glCreateTextures(GL_TEXTURE_2D, 1, &textureId);
 
-	glTextureParameteri(TextureID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTextureParameteri(TextureID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTextureParameteri(TextureID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-	glTextureParameteri(TextureID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTextureParameteri(textureId, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTextureParameteri(textureId, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTextureParameteri(textureId, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	glTextureParameteri(textureId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	glTextureStorage2D(TextureID, 1, GL_RGBA8, width, height);
-	glTextureSubImage2D(TextureID, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, textData);
-	glGenerateTextureMipmap(TextureID);
+	glTextureStorage2D(textureId, 1, GL_RGBA8, width, height);
+	glTextureSubImage2D(textureId, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, textData);
+	glGenerateTextureMipmap(textureId);
 
-	glBindTextureUnit(0, TextureID);
+	glBindTextureUnit(0, textureId);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	stbi_image_free(textData);
 
 	return true;
 }
 
-void Texture::UseTexture(unsigned unit) const
+void Texture::UseTexture(const unsigned unit) const
 {
-	glBindTextureUnit(unit, TextureID);
+	glBindTextureUnit(unit, textureId);
 }
+
 void Texture::ClearTexture()
 {
-	glDeleteTextures(1, &TextureID);
-	TextureID = NULL;
+	glDeleteTextures(1, &textureId);
+	textureId = NULL;
 	width = 0;
 	height = 0;
 	bitDepth = 0;

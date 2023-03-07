@@ -23,30 +23,30 @@ struct DirectionalLight
 
 uniform DirectionalLight directionalLight;
 uniform Material material;
-layout (binding = 0) uniform sampler2D texture_diffuse1;
-layout (binding = 1) uniform sampler2D texture_specular1;
-layout (binding = 2) uniform sampler2D texture_normal1;
-layout (binding = 3) uniform sampler2D texture_height1;
+layout (binding = 1) uniform sampler2D texture_diffuse1;
+layout (binding = 2) uniform sampler2D texture_specular1;
+layout (binding = 3) uniform sampler2D texture_normal1;
+layout (binding = 4) uniform sampler2D texture_height1;
 
 uniform vec3 cameraPos;
 
 void main()
 {
 	vec4 ambientColor = vec4(directionalLight.color, 1.0) * directionalLight.ambientIntensity;
+
 	float diffuseFactor = max(dot(normalize(Normal), normalize(directionalLight.direction)), 0.0);
 	vec4 diffuseColor = vec4(directionalLight.color, 1.0) * directionalLight.diffuseIntensity * diffuseFactor;
 	vec4 specularColor = vec4(0.0, 0.0, 0.0, 0.0);
-	if(diffuseFactor > 0.0f)
+	if(diffuseFactor > 0.0)
 	{
 		vec3 viewDir = normalize(cameraPos - FragPos);
 		vec3 reflectDir = normalize(reflect(-directionalLight.direction, normalize(Normal)));
-
 		float spec = dot(viewDir, reflectDir);
 		if(spec > 0.0f)
 		{
 			spec = pow(spec, material.shininess);
-			specularColor = vec4(directionalLight.color, 1.0) * material.specularIntensity * spec;
+			specularColor = vec4(directionalLight.color, 1.0) * material.specularIntensity * spec * texture2D(texture_specular1, vTex);
 		}
 	}
-	color = texture2D(texture_diffuse1, vTex) * (ambientColor + diffuseColor + specularColor );
+	color = texture2D(texture_diffuse1, vTex) * (ambientColor + diffuseColor );
 }
