@@ -77,7 +77,7 @@ Mesh * Model::LoadMesh(const aiMesh* mesh, const aiScene* scene)
 {
 	vector<float> vertices;
 	vector<unsigned int> indices;
-	vector<Texture> textures;
+	vector<Texture*> textures;
 
 	for (size_t i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -112,16 +112,16 @@ Mesh * Model::LoadMesh(const aiMesh* mesh, const aiScene* scene)
 	// normal: texture_normalN
 
 	// 1. diffuse maps
-	vector<Texture> diffuseMaps = LoadMaterial(material, aiTextureType_DIFFUSE, "texture_diffuse");
+	vector<Texture*> diffuseMaps = LoadMaterial(material, aiTextureType_DIFFUSE, "texture_diffuse");
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 	// 2. specular maps
-	vector<Texture> specularMaps = LoadMaterial(material, aiTextureType_SPECULAR, "texture_specular");
+	vector<Texture*> specularMaps = LoadMaterial(material, aiTextureType_SPECULAR, "texture_specular");
 	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	// 3. normal maps
-	vector<Texture> normalMaps = LoadMaterial(material, aiTextureType_NORMALS, "texture_normal");
+	vector<Texture*> normalMaps = LoadMaterial(material, aiTextureType_NORMALS, "texture_normal");
 	textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 	// 4. height maps
-	vector<Texture> heightMaps = LoadMaterial(material, aiTextureType_HEIGHT, "texture_height");
+	vector<Texture*> heightMaps = LoadMaterial(material, aiTextureType_HEIGHT, "texture_height");
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
 	const auto newMesh = new Mesh();
@@ -130,9 +130,9 @@ Mesh * Model::LoadMesh(const aiMesh* mesh, const aiScene* scene)
 	return newMesh;
 }
 
-vector<Texture> Model::LoadMaterial(const aiMaterial * material, const aiTextureType type, const string& typeName)
+vector<Texture*> Model::LoadMaterial(const aiMaterial * material, const aiTextureType type, const string& typeName)
 {
-	vector<Texture> textures;
+	vector<Texture*> textures;
 	for (unsigned int i = 0; i < material->GetTextureCount(type); i++)
 	{
 		aiString str;
@@ -146,19 +146,19 @@ vector<Texture> Model::LoadMaterial(const aiMaterial * material, const aiTexture
 		{
 			if (strcmp(j.GetFileLocation(), pathData) == 0)
 			{
-				textures.push_back(j);
+				textures.push_back(&j);
 				skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
 				break;
 			}
 		}
 		if (!skip)
 		{   // if texture hasn't been loaded already, load it
-			Texture texture(pathData, false);
-			texture.SetTextureType(typeName);
+			auto texture = new Texture(pathData, false);
+			texture->SetTextureType(typeName);
 			cout << "Loading texture " << pathData << endl;
-			texture.LoadTexture();
+			texture->LoadTexture();
 			textures.push_back(texture);
-			textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
+			textures_loaded.push_back(*texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
 		}
 	}
 	return textures;

@@ -16,7 +16,7 @@ Mesh::Mesh()
 	indexCount = 0;
 }
 
-void Mesh::SetTextures(vector<Texture> textureList)
+void Mesh::SetTextures(vector<Texture*> textureList)
 {
 	textures = std::move(textureList);
 }
@@ -60,7 +60,7 @@ void Mesh::RenderMesh(const Shader & shader) const
 		glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
 		// retrieve texture number (the N in diffuse_textureN)
 		string number;
-		string name = textures[i].GetTextureType();
+		string name = textures[i]->GetTextureType();
 		if (name == "texture_diffuse")
 		{
 			number = to_string(diffuseNr++);
@@ -79,7 +79,7 @@ void Mesh::RenderMesh(const Shader & shader) const
 		}
 		// now set the sampler to the correct texture unit
 		glUniform1i(glGetUniformLocation(shader.getShaderIdI(), (name + number).c_str()), static_cast<int>(i));
-		textures[i].UseTexture(i);
+		textures[i]->UseTexture(i);
 	}
 
 	glBindVertexArray(VAO);

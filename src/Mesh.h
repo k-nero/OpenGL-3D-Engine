@@ -12,7 +12,7 @@ public:
 	Mesh();
 	void CreateMesh(const float* vertices, const unsigned int* indices, int numOfVertices, int numOfIndices);
 	void RenderMesh(const Shader& shader) const;
-	void SetTextures(vector<Texture> textureList);
+	void SetTextures(vector<Texture*> textureList);
 	void ClearMesh();
 	~Mesh() { ClearMesh(); }
 
@@ -22,6 +22,6 @@ private:
 	unsigned int IBO;
 	int indexCount;
 
-	vector<Texture> textures;
+	vector<Texture*> textures;
 };
 

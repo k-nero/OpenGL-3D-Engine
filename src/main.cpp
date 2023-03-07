@@ -30,7 +30,7 @@ Material shinyMaterial;
 Material dullMaterial;
 Light mainLight;
 
-Model Model3D;
+Model model3D;
 
 float deltaTime = 0.0f;
 float lastTime = 0.0f;
@@ -160,8 +160,8 @@ int main()
 	diamondTexture = Texture(ctr, false);
 	diamondTexture.LoadTexture();
 	diamondTexture.SetTextureType("texture_diffuse");
-	vector<Texture> textures;
-	textures.push_back(diamondTexture);
+	vector<Texture*> textures;
+	textures.push_back(&diamondTexture);
 
 	for (const auto& mesh : meshList)
 	{
@@ -171,8 +171,8 @@ int main()
 	shinyMaterial = Material(1.0f, 32);
 	dullMaterial = Material(0.3f, 4);
 
-	Model3D = Model();
-	Model3D.LoadModel("models/Mineways2Skfb.obj");
+	model3D = Model();
+	model3D.LoadModel("models/Mineways2Skfb.obj");
 
 	mainLight = Light(1.0f, 1.0f, 1.0f, 0.1f, 10.0f, -3.0f, -5.0f, 1.0f);
 
@@ -238,7 +238,7 @@ int main()
 			model = scale(model, vec3(500.0f, 500.0f, 500.0f));
 			glUniformMatrix4fv(shaderList[0]->GetModelLocation(), 1, GL_FALSE, value_ptr(model));
 			dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-			Model3D.RenderModel(*shaderList[0]);
+			model3D.RenderModel(*shaderList[0]);
 
 			glUseProgram(NULL);
 			mainWindow.SwapBuffers();
