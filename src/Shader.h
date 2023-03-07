@@ -41,4 +41,3 @@ private:
 	void CompileShader(const char* vertexCode, const char* fragmentCode);
 	static void AddShader(unsigned int theProgram, const char* shaderCode, unsigned int shaderType);
 };
-

@@ -30,8 +30,6 @@ Material shinyMaterial;
 Material dullMaterial;
 Light mainLight;
 
-Model model3D;
-
 float deltaTime = 0.0f;
 float lastTime = 0.0f;
 
@@ -171,10 +169,10 @@ int main()
 	shinyMaterial = Material(1.0f, 32);
 	dullMaterial = Material(0.3f, 4);
 
-	model3D = Model();
-	model3D.LoadModel("models/Mineways2Skfb.obj");
+	auto Model3D = Model();
+	Model3D.LoadModel("models/Mineways2Skfb.obj");
 
-	mainLight = Light(1.0f, 1.0f, 1.0f, 0.1f, 10.0f, -3.0f, -5.0f, 1.0f);
+	mainLight = Light(1.0f, 1.0f, 1.0f, 0.1f, 50.0f, -300.0f, 500.0f, 1.0f);
 
 	//Loop until window closed
 	while (!mainWindow.GetShouldClose())
@@ -209,8 +207,11 @@ int main()
 			const float tmp = static_cast<float>(mainWindow.GetWidth()) / static_cast<float>(mainWindow.GetHeight());
 			float aspect = 1;
 			aspect = (isnan(tmp)) ? aspect : tmp;
+			const auto cameraPos = camera.GetCameraPosition();
+			
+			glUniform3f(uniformCameraPos, cameraPos.x, cameraPos.y, cameraPos.z);
 
-			glUniform3f(uniformCameraPos, camera.GetCameraPosition().x, camera.GetCameraPosition().y, camera.GetCameraPosition().z);
+			cout << cameraPos.x << " " << cameraPos.y << " " << cameraPos.z << " \r" << flush;
 
 			mat4 projection = perspective(45.0f, aspect, 0.1f, 2000.0f);
 			const int uniformProjection = shaderList[0]->GetProjectionLocation();
@@ -238,7 +239,7 @@ int main()
 			model = scale(model, vec3(500.0f, 500.0f, 500.0f));
 			glUniformMatrix4fv(shaderList[0]->GetModelLocation(), 1, GL_FALSE, value_ptr(model));
 			dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-			model3D.RenderModel(*shaderList[0]);
+			Model3D.RenderModel(*shaderList[0]);
 
 			glUseProgram(NULL);
 			mainWindow.SwapBuffers();

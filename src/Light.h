@@ -19,4 +19,3 @@ private:
 	vec3 direction;
 	float diffuseIntensity;
 };
-

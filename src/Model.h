@@ -31,7 +31,5 @@ private:
 	vector<Texture*> LoadMaterial(const aiMaterial* material, aiTextureType type, const string& typeName);
 
 	vector<Mesh*> meshList;
-	vector<Texture> textures_loaded;
-	vector<unsigned int> meshToTex;
+	vector<Texture*> textures_loaded;
 };
-

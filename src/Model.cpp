@@ -10,7 +10,6 @@ Model::Model()
 Model::Model(const Model& other)
 {
 	meshList = other.meshList;
-	meshToTex = other.meshToTex;
 	textures_loaded = other.textures_loaded;
 }
 
@@ -19,7 +18,6 @@ Model& Model::operator=(const Model& other)
 	if(this != &other)
 	{
 		meshList = other.meshList;
-		meshToTex = other.meshToTex;
 		textures_loaded = other.textures_loaded;
 	}
 	return * this;
@@ -29,7 +27,6 @@ Model& Model::operator=(const Model& other)
 Model::Model(Model&& other) noexcept
 {
 	meshList = std::move(other.meshList);
-	meshToTex = std::move(other.meshToTex);
 	textures_loaded = std::move(other.textures_loaded);
 }
 
@@ -39,7 +36,6 @@ Model& Model::operator=(Model&& other) noexcept
 	if(this != &other)
 	{
 		meshList = std::move(other.meshList);
-		meshToTex = std::move(other.meshToTex);
 		textures_loaded = std::move(other.textures_loaded);
 	}
 	return * this;
@@ -57,6 +53,11 @@ void Model::LoadModel(const string& fileName)
 	}
 
 	LoadNode(scene->mRootNode, scene);
+	if(!textures_loaded.empty())
+	{
+		cout << "Model " << fileName << " loaded successfully, destroying temp" << endl;
+		textures_loaded.clear();
+	}
 }
 
 void Model::LoadNode(const aiNode * node, const aiScene * scene)
@@ -104,7 +105,7 @@ Mesh * Model::LoadMesh(const aiMesh* mesh, const aiScene* scene)
 
 
 	const aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-	// we assume a convention for sampler names in the shaders. Each diffuse texture should be named
+	// we assume a convention for sampler names in the shader. Each diffuse texture should be named
 	// as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
 	// Same applies to other texture as the following list summarizes:
 	// diffuse: texture_diffuseN
@@ -144,9 +145,9 @@ vector<Texture*> Model::LoadMaterial(const aiMaterial * material, const aiTextur
 		strcpy_s(pathData, pathStr.length() + 1, pathStr.c_str());
 		for (auto& j : textures_loaded)
 		{
-			if (strcmp(j.GetFileLocation(), pathData) == 0)
+			if (strcmp(j->GetFileLocation(), pathData) == 0)
 			{
-				textures.push_back(&j);
+				textures.push_back(j);
 				skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
 				break;
 			}
@@ -158,7 +159,7 @@ vector<Texture*> Model::LoadMaterial(const aiMaterial * material, const aiTextur
 			cout << "Loading texture " << pathData << endl;
 			texture->LoadTexture();
 			textures.push_back(texture);
-			textures_loaded.push_back(*texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
+			textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
 		}
 	}
 	return textures;
@@ -174,17 +175,23 @@ void Model::RenderModel(const Shader& shader) const
 
 void Model::ClearModel()
 {
-	for (auto& i : meshList)
+	cout << "Destroying model " << endl;
+	for (auto& mesh : meshList)
 	{
-		if (i)
+		if (mesh)
 		{
-			i->ClearMesh();
-			delete i;
-			i = nullptr;
+			mesh->~Mesh();
+			delete mesh;
+			mesh = nullptr;
 		}
 	}
-	textures_loaded.clear();
+	for(auto & tmp_textures : textures_loaded)
+	{
+		if(tmp_textures)
+		{
+			tmp_textures->~Texture();
+			delete tmp_textures;
+			tmp_textures = nullptr;
+		}
+	}
 }
-
-
-

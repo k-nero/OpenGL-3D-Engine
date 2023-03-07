@@ -1,6 +1,9 @@
 #pragma once
+
 #include <string>
+
 using namespace std;
+
 class Texture
 {
 public:
@@ -23,4 +26,3 @@ private:
 	char * fileLocation;
 	string type;
 };
-

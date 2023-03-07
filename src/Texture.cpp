@@ -80,6 +80,3 @@ void Texture::ClearTexture()
 	bitDepth = 0;
 	fileLocation = nullptr;
 }
-
-
-
