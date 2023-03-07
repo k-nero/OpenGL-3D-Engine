@@ -25,41 +25,28 @@ Texture::Texture(const char* fileLoc, bool flipTexture = false)
 	stbi_set_flip_vertically_on_load(flipTexture);
 }
 
-bool Texture::LoadTextureAlpha()
-{
-	unsigned char* textData = stbi_load(fileLocation, &width, &height, &bitDepth, 0);
-	if(!textData)
-	{
-		cout << "Failed to load: " << fileLocation << endl;
-		return false;
-	}
-
-	glCreateTextures(GL_TEXTURE_2D, 1, &TextureID);
-
-	glTextureParameteri(TextureID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTextureParameteri(TextureID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTextureParameteri(TextureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTextureParameteri(TextureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glTextureStorage2D(TextureID, 1, GL_RGBA8, width, height);
-	glTextureSubImage2D(TextureID, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, textData);
-	glGenerateTextureMipmap(TextureID);
-
-	glBindTextureUnit(0, TextureID);
-	stbi_image_free(textData);
-
-	return true;
-}
-
 bool Texture::LoadTexture()
 {
 	unsigned char* textData = stbi_load(fileLocation, &width, &height, &bitDepth, 0);
 	if (!textData)
 	{
-		cout << "Failed to load: " << fileLocation << endl;
+		cout << "Failed to load texture: " << fileLocation << endl;
 		return false;
 	}
-	stbi_set_flip_vertically_on_load(0);
+
+	GLenum format = GL_RGB;
+	if(bitDepth == 1)
+	{
+		format = GL_RED;
+	}
+	else if(bitDepth == 3)
+	{
+		format = GL_RGB;
+	}
+	else if(bitDepth == 4)
+	{
+		format = GL_RGBA;
+	}
 
 	glCreateTextures(GL_TEXTURE_2D, 1, &TextureID);
 
@@ -69,7 +56,7 @@ bool Texture::LoadTexture()
 	glTextureParameteri(TextureID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	glTextureStorage2D(TextureID, 1, GL_RGBA8, width, height);
-	glTextureSubImage2D(TextureID, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, textData);
+	glTextureSubImage2D(TextureID, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, textData);
 	glGenerateTextureMipmap(TextureID);
 
 	glBindTextureUnit(0, TextureID);
@@ -79,9 +66,9 @@ bool Texture::LoadTexture()
 	return true;
 }
 
-void Texture::UseTexture() const
+void Texture::UseTexture(unsigned unit) const
 {
-	glBindTextureUnit(0, TextureID);
+	glBindTextureUnit(unit, TextureID);
 }
 void Texture::ClearTexture()
 {
@@ -93,9 +80,5 @@ void Texture::ClearTexture()
 	fileLocation = nullptr;
 }
 
-Texture::~Texture()
-{
-	ClearTexture();
-}
 
 

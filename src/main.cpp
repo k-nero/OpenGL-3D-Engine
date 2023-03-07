@@ -148,14 +148,22 @@ void CreateShader()
 int main()
 {
 	mainWindow = Window();
-	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 100.0f, 0.5f);
+	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.5f);
 	mainWindow.Initialize();
 
 	CreateObject();
 	CreateShader();
 
 	diamondTexture = Texture("textures/diamond.png", false);
-	diamondTexture.LoadTextureAlpha();
+	diamondTexture.LoadTexture();
+	diamondTexture.SetTextureType("texture_diffuse");
+	vector<Texture> textures;
+	textures.push_back(diamondTexture);
+
+	for (const auto& mesh : meshList)
+	{
+		mesh->SetTextures(textures);
+	}
 
 	shinyMaterial = Material(1.0f, 32);
 	dullMaterial = Material(0.3f, 4);
@@ -163,7 +171,7 @@ int main()
 	Model3D = Model();
 	Model3D.LoadModel("models/backpack.obj");
 
-	mainLight = Light(1.0f, 1.0f, 1.0f, 1.0f, 2.0f, -1.0f, -2.0f, 0.3f);
+	mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 2.0f, -1.0f, -2.0f, 1.0f);
 
 	//Loop until window closed
 	while (!mainWindow.GetShouldClose())
@@ -211,21 +219,20 @@ int main()
 			model = rotate(model, static_cast<float>(Radiants(0)), vec3(0.0f, 1.0f, 0.0f));
 			const int uniformModel = shaderList[0]->GetModelLocation();
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, value_ptr(model));
-			diamondTexture.UseTexture();
 			shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-			meshList[0]->RenderMesh();
+			meshList[0]->RenderMesh(*shaderList[0]);
 
 			model = translate(model, vec3(0.0f, 0.0f, -4.5f));
 			model = rotate(model, static_cast<float>(Radiants(0)), vec3(0.0f, 1.0f, 0.0f));
 			glUniformMatrix4fv(shaderList[0]->GetModelLocation(), 1, GL_FALSE, value_ptr(model));
 			dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-			meshList[1]->RenderMesh();
+			meshList[1]->RenderMesh(*shaderList[0]);
 
 			model = translate(model, vec3(0.0f, 5.0f, -0.0f));
 			model = rotate(model, static_cast<float>(Radiants(0)), vec3(0.0f, 1.0f, 0.0f));
 			glUniformMatrix4fv(shaderList[0]->GetModelLocation(), 1, GL_FALSE, value_ptr(model));
 			dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
-			Model3D.RenderModel(); 
+			Model3D.RenderModel(*shaderList[0]);
 
 			glUseProgram(NULL);
 			mainWindow.SwapBuffers();

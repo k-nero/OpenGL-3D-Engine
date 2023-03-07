@@ -21,17 +21,17 @@ public:
 	Model(Model&& other) noexcept;
 	Model& operator=(Model&& other) noexcept;
 	void LoadModel(const string& fileName);
-	void RenderModel() const;
+	void RenderModel(const Shader& shader) const;
 	void ClearModel();
-	~Model();
+	~Model() { ClearModel(); } 
 
 private:
 	void LoadNode(const aiNode* node, const aiScene* scene);
-	void LoadMesh(const aiMesh* mesh, const aiScene* scene);
-	void LoadMaterial(const aiScene* scene);
+	Mesh * LoadMesh(const aiMesh* mesh, const aiScene* scene);
+	vector<Texture> LoadMaterial(const aiMaterial* material, const aiTextureType type, const string& typeName);
 
 	vector<Mesh*> meshList;
-	vector<Texture*> textureList;
+	vector<Texture> textures_loaded;
 	vector<unsigned int> meshToTex;
 };
 

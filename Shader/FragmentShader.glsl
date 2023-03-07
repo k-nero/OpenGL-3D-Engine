@@ -23,9 +23,10 @@ struct DirectionalLight
 
 uniform DirectionalLight directionalLight;
 uniform Material material;
-layout (binding = 0) uniform sampler2D texture_diffuse;
-layout (binding = 1) uniform sampler2D texture_specular;
-layout (binding = 2) uniform sampler2D texture_normal;
+layout (binding = 0) uniform sampler2D texture_diffuse1;
+layout (binding = 1) uniform sampler2D texture_specular1;
+layout (binding = 2) uniform sampler2D texture_normal1;
+layout (binding = 3) uniform sampler2D texture_height1;
 
 uniform vec3 cameraPos;
 
@@ -47,5 +48,5 @@ void main()
 			specularColor = vec4(directionalLight.color, 1.0) * material.specularIntensity * spec;
 		}
 	}
-	color = texture2D(texture_diffuse, vTex) * (ambientColor + diffuseColor + specularColor);
+	color = texture2D(texture_diffuse1, vTex) * (ambientColor + diffuseColor ) + (texture2D(texture_specular1, vTex) * specularColor);
 }

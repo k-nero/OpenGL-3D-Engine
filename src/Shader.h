@@ -21,6 +21,7 @@ public:
 	[[nodiscard]] int GetCameraPosLocation() const;
 	[[nodiscard]] int GetSpecularIntensityLocation() const;
 	[[nodiscard]] int GetShininessLocation() const;
+	[[nodiscard]] int getShaderIdI() const { return shaderId; }
 	void UseShader() const;
 	void ClearShader();
 	~Shader();

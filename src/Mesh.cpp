@@ -1,6 +1,12 @@
 #include "Mesh.h"
 #include "GL/glew.h"
 #include <cstddef>
+#include <string>
+#include <utility>
+
+#include "Shader.h"
+
+using namespace std;
 
 Mesh::Mesh()
 {
@@ -8,6 +14,11 @@ Mesh::Mesh()
 	VBO = 0;
 	IBO = 0;
 	indexCount = 0;
+}
+
+void Mesh::SetTextures(vector<Texture> textureList)
+{
+	textures = std::move(textureList);
 }
 
 void Mesh::CreateMesh(const float* vertices, const unsigned int* indices, int numOfVertices, int numOfIndices)
@@ -38,13 +49,45 @@ void Mesh::CreateMesh(const float* vertices, const unsigned int* indices, int nu
 	glBindVertexArray(NULL);
 }
 
-void Mesh::RenderMesh() const
+void Mesh::RenderMesh(const Shader & shader) const
 {
+	unsigned int diffuseNr = 1;
+	unsigned int specularNr = 1;
+	unsigned int normalNr = 1;
+	unsigned int heightNr = 1;
+	for (unsigned int i = 0; i < textures.size(); i++)
+	{
+		glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
+		// retrieve texture number (the N in diffuse_textureN)
+		string number;
+		string name = textures[i].GetTextureType();
+		if (name == "texture_diffuse")
+		{
+			number = to_string(diffuseNr++);
+		}
+		else if (name == "texture_specular")
+		{
+			number = to_string(specularNr++);
+		}
+		else if (name == "texture_norma")
+		{
+			number = to_string(normalNr++);
+		}
+		else if (name == "texture_height")
+		{
+			number = to_string(heightNr++);
+		}
+		// now set the sampler to the correct texture unit
+		glUniform1i(glGetUniformLocation(shader.getShaderIdI(), (name + number).c_str()), static_cast<int>(i));
+		glBindTexture(GL_TEXTURE_2D, textures[i].GetTextureID());
+	}
+
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL);
 	glBindVertexArray(NULL);
+	glActiveTexture(GL_TEXTURE0);
 }
 
 void Mesh::ClearMesh()
@@ -67,8 +110,3 @@ void Mesh::ClearMesh()
 
 	indexCount = 0;
 }
-
-Mesh::~Mesh()
-{
-	ClearMesh();
-};
