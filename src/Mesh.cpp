@@ -79,7 +79,7 @@ void Mesh::RenderMesh(const Shader & shader) const
 		}
 		// now set the sampler to the correct texture unit
 		glUniform1i(glGetUniformLocation(shader.getShaderIdI(), (name + number).c_str()), static_cast<int>(i));
-		glBindTexture(GL_TEXTURE_2D, textures[i].GetTextureID());
+		textures[i].UseTexture(i);
 	}
 
 	glBindVertexArray(VAO);

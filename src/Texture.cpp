@@ -15,13 +15,13 @@ Texture::Texture()
 	fileLocation = nullptr;
 }
 
-Texture::Texture(const char* fileLoc, bool flipTexture = false)
+Texture::Texture( char* fileLoc, bool flipTexture = false)
 {
 	TextureID = 0;
 	width = 0;
 	height = 0;
 	bitDepth = 0;
-	fileLocation = const_cast<char*>(fileLoc);
+	fileLocation = fileLoc;
 	stbi_set_flip_vertically_on_load(flipTexture);
 }
 
@@ -52,7 +52,7 @@ bool Texture::LoadTexture()
 
 	glTextureParameteri(TextureID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTextureParameteri(TextureID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTextureParameteri(TextureID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTextureParameteri(TextureID, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 	glTextureParameteri(TextureID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	glTextureStorage2D(TextureID, 1, GL_RGBA8, width, height);

@@ -12,7 +12,7 @@ public:
 	void RenderMesh(const Shader& shader) const;
 	void SetTextures(vector<Texture> textureList);
 	void ClearMesh();
-	//~Mesh() { ClearMesh(); }
+	~Mesh() { ClearMesh(); }
 
 private:
 	unsigned int VAO;

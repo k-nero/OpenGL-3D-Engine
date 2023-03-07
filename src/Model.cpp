@@ -139,10 +139,9 @@ vector<Texture> Model::LoadMaterial(const aiMaterial * material, const aiTexture
 		material->GetTexture(type, i, &str);
 		// check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
 		bool skip = false;
-		auto path = string(str.C_Str());
-		const auto pathFolder = string("textures/");
-		const auto pathAbsolute = (pathFolder + path);
-		const auto pathData = pathAbsolute.c_str();
+		auto pathStr = (string("textures/") + string(str.C_Str()));
+		auto * pathData = new char[pathStr.length() + 1];
+		strcpy_s(pathData, pathStr.length() + 1, pathStr.c_str());
 		for (auto& j : textures_loaded)
 		{
 			if (strcmp(j.GetFileLocation(), pathData) == 0)
@@ -167,9 +166,9 @@ vector<Texture> Model::LoadMaterial(const aiMaterial * material, const aiTexture
 
 void Model::RenderModel(const Shader& shader) const
 {
-	for(int i = 0; i < meshList.size(); i++)
+	for (auto & mesh : meshList)
 	{
-		meshList[i]->RenderMesh(shader);
+		mesh->RenderMesh(shader);
 	}
 }
 

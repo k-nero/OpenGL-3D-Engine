@@ -154,7 +154,10 @@ int main()
 	CreateObject();
 	CreateShader();
 
-	diamondTexture = Texture("textures/diamond.png", false);
+	const string textureLocation = "textures/diamond.png";
+	auto * ctr = new char[textureLocation.length() + 1];
+	strcpy_s(ctr,textureLocation.length() + 1, textureLocation.c_str());
+	diamondTexture = Texture(ctr, false);
 	diamondTexture.LoadTexture();
 	diamondTexture.SetTextureType("texture_diffuse");
 	vector<Texture> textures;

@@ -5,7 +5,7 @@ class Texture
 {
 public:
 	Texture();
-	Texture(const char* fileLoc, bool flipTexture);
+	Texture( char* fileLoc, bool flipTexture);
 
 	bool LoadTexture();
 	[[nodiscard]] string GetTextureType() const { return type; }
@@ -20,7 +20,7 @@ private:
 	unsigned int TextureID;
 	int width, height, bitDepth;
 
-	char* fileLocation;
+	char * fileLocation;
 	string type;
 };
 

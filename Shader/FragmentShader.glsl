@@ -48,5 +48,5 @@ void main()
 			specularColor = vec4(directionalLight.color, 1.0) * material.specularIntensity * spec;
 		}
 	}
-	color = texture2D(texture_diffuse1, vTex) * (ambientColor + diffuseColor ) + (texture2D(texture_specular1, vTex) * specularColor);
+	color = texture2D(texture_diffuse1, vTex) * (ambientColor + diffuseColor + specularColor );
 }
