@@ -106,6 +106,12 @@
     <None Include="models\combined02.mtl">
       <Filter>Resource Files\Models</Filter>
     </None>
+    <None Include="Shader\LightFragmentShader.glsl">
+      <Filter>Resource Files\Shader</Filter>
+    </None>
+    <None Include="Shader\LightVertextShader.glsl">
+      <Filter>Resource Files\Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\diamond.png">
@@ -132,10 +138,5 @@
     <Image Include="textures\transparent_spec.jpg">
       <Filter>Resource Files\textures</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="models\combined02.obj">
-      <Filter>Resource Files\Models</Filter>
-    </Object>
   </ItemGroup>
 </Project>

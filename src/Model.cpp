@@ -154,10 +154,12 @@ vector<Texture*> Model::LoadMaterial(const aiMaterial * material, const aiTextur
 		}
 		if (!skip)
 		{   // if texture hasn't been loaded already, load it
-			auto texture = new Texture(pathData, false);
+			auto texture = new Texture(pathData, true);
 			texture->SetTextureType(typeName);
-			cout << "Loading texture " << pathData << endl;
-			texture->LoadTexture();
+			if( texture->LoadTexture())
+			{
+				cout << "Texture " << pathData << " loaded successfully" << endl;
+			}
 			textures.push_back(texture);
 			textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
 		}
@@ -185,13 +187,13 @@ void Model::ClearModel()
 			mesh = nullptr;
 		}
 	}
-	for(auto & tmp_textures : textures_loaded)
+	for(auto & tmpTextures : textures_loaded)
 	{
-		if(tmp_textures)
+		if(tmpTextures)
 		{
-			tmp_textures->~Texture();
-			delete tmp_textures;
-			tmp_textures = nullptr;
+			tmpTextures->~Texture();
+			delete tmpTextures;
+			tmpTextures = nullptr;
 		}
 	}
 }

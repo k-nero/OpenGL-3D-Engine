@@ -1,18 +1,23 @@
 #pragma once
 
 #include "GL/glew.h"
+#include <glm/glm.hpp>
+
+using namespace glm;
 
 class Material
 {
 public:
 	Material();
-	Material(float sIntensity, float shine);
-	void UseMaterial(int specularIntensityLocation, int shininessLocation) const;
+	Material(vec3 specularMat, vec3 diffuseMat, vec3 ambientMat, float shine);
+	void UseMaterial(int specularMaterialLocation, int diffuseMaterialLocation, int ambientMaterialLocation, int shininessLocation) const;
 
 	~Material();
 
 private:
-	float specularIntensity = 0.0f;
+	vec3 diffuseMaterial;
+	vec3 specularMaterial;
+	vec3 ambientMaterial;
 	float shininess = 0.0f;
 };
 

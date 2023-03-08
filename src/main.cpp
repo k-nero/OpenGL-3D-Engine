@@ -146,7 +146,7 @@ void CreateShader()
 int main()
 {
 	mainWindow = Window();
-	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 100.0f, 0.5f);
+	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.5f);
 	mainWindow.Initialize();
 
 	CreateObject();
@@ -166,13 +166,22 @@ int main()
 		mesh->SetTextures(textures);
 	}
 
-	shinyMaterial = Material(1.0f, 32);
-	dullMaterial = Material(0.3f, 4);
-
 	auto Model3D = Model();
-	Model3D.LoadModel("models/Mineways2Skfb.obj");
+	Model3D.LoadModel("models/backpack.obj");
 
-	mainLight = Light(1.0f, 1.0f, 1.0f, 0.1f, 50.0f, -300.0f, 500.0f, 1.0f);
+	const auto specularMaps = vec3(1.0f);
+	const auto ambientMaps = vec3(1.0f);
+	const auto diffuseMaps = vec3(1.0f);
+
+	shinyMaterial = Material(specularMaps, diffuseMaps, ambientMaps, 32);
+	dullMaterial = Material(specularMaps, diffuseMaps, ambientMaps, 4);
+
+	const auto specularLight = vec3(1.0f, 1.0f, 1.0f);
+	const auto ambientLight = vec3(0.2f);
+	const auto diffuseLight = vec3(1.0f);
+	const auto direction = vec3(50.0f, -300.0f, 500.0f);
+
+	mainLight = Light(ambientLight, diffuseLight, specularLight, direction);
 
 	//Loop until window closed
 	while (!mainWindow.GetShouldClose())
@@ -196,13 +205,15 @@ int main()
 			}
 
 			const auto uniformAmbientColor = (shaderList[0]->GetAmbientColorLocation());
-			const auto uniformAmbientIntensity = (shaderList[0]->GetAmbientIntensityLocation());
-			const auto uniformDirection = (shaderList[0]->GetDirectionLocation());
-			const auto uniformDiffuseIntensity = (shaderList[0]->GetDiffuseIntensityLocation());
+			const auto uniformDiffuseColor = (shaderList[0]->GetDiffuseColorLocation());
+			const auto uniformSpecularColor = (shaderList[0]->GetSpecularColorLocation());
+			const auto uniformDirection = (shaderList[0]->GetLightDirectionLocation());
+			const auto uniformAmbientMaterial = (shaderList[0]->GetAmbientMaterialLocation());
+			const auto uniformSpecularMaterial = (shaderList[0]->GetSpecularMaterialLocation());
+			const auto uniformDiffuseMaterial = (shaderList[0]->GetDiffuseMaterialLocation());
+			const auto uniformShininess = (shaderList[0]->GetShininessMaterialLocation());
 			const auto uniformCameraPos = (shaderList[0]->GetCameraPosLocation());
-			const auto uniformSpecularIntensity = (shaderList[0]->GetSpecularIntensityLocation());
-			const auto uniformShininess = (shaderList[0]->GetShininessLocation());
-			mainLight.UseLight(uniformAmbientIntensity, uniformAmbientColor, uniformDiffuseIntensity, uniformDirection);
+			mainLight.UseLight(uniformSpecularColor, uniformAmbientColor, uniformDiffuseColor, uniformDirection);
 
 			const float tmp = static_cast<float>(mainWindow.GetWidth()) / static_cast<float>(mainWindow.GetHeight());
 			float aspect = 1;
@@ -225,20 +236,20 @@ int main()
 			model = rotate(model, static_cast<float>(Radiants(0)), vec3(0.0f, 1.0f, 0.0f));
 			const int uniformModel = shaderList[0]->GetModelLocation();
 			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, value_ptr(model));
-			shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			dullMaterial.UseMaterial(uniformSpecularMaterial,uniformDiffuseMaterial, uniformAmbientMaterial, uniformShininess);
 			meshList[0]->RenderMesh(*shaderList[0]);
 
 			model = translate(model, vec3(0.0f, 0.0f, -4.5f));
 			model = rotate(model, static_cast<float>(Radiants(0)), vec3(0.0f, 1.0f, 0.0f));
 			glUniformMatrix4fv(shaderList[0]->GetModelLocation(), 1, GL_FALSE, value_ptr(model));
-			dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			shinyMaterial.UseMaterial(uniformSpecularMaterial, uniformDiffuseMaterial, uniformAmbientMaterial, uniformShininess);
 			meshList[1]->RenderMesh(*shaderList[0]);
 
 			model = translate(model, vec3(0.0f, 5.0f, -0.0f));
 			model = rotate(model, static_cast<float>(Radiants(0)), vec3(0.0f, 1.0f, 0.0f));
-			model = scale(model, vec3(500.0f, 500.0f, 500.0f));
+			model = scale(model, vec3(1.0f, 1.0f, 1.0f));
 			glUniformMatrix4fv(shaderList[0]->GetModelLocation(), 1, GL_FALSE, value_ptr(model));
-			dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			shinyMaterial.UseMaterial(uniformSpecularMaterial, uniformDiffuseMaterial, uniformAmbientMaterial, uniformShininess);
 			Model3D.RenderModel(*shaderList[0]);
 
 			glUseProgram(NULL);
