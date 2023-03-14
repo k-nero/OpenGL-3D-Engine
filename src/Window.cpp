@@ -143,8 +143,6 @@ int Window::Initialize()
 		return 1;
 	}
 
-	glEnable(GL_DEPTH_TEST);
-
 	//Vertical sync
 	glfwSwapInterval(GLFW_TRUE);
 

@@ -87,7 +87,6 @@ void Mesh::RenderMesh(const Shader & shader) const
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL);
 	glBindVertexArray(NULL);
-	glActiveTexture(GL_TEXTURE0);
 }
 
 void Mesh::ClearMesh()

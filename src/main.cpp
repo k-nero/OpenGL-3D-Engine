@@ -1,5 +1,7 @@
 #include "iostream"
 #include "vector"
+#include <intrin.h>
+//#include <immintrin.h>
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
@@ -46,10 +48,14 @@ void CalAverageNormal(const unsigned int * indices, const unsigned int count, fl
 {
 	for (size_t i = 0; i < count; i += 3)
 	{
+		/*auto in0 = static_cast<unsigned int>(__umulh(indices[i], vLength));
+		auto in1 = static_cast<unsigned int>(__umulh(indices[i + 1], vLength));
+		auto in2 = static_cast<unsigned int>(__umulh(indices[i + 2], vLength));*/
+
 		unsigned int in0 = indices[i] * vLength;
 		unsigned int in1 = indices[i + 1] * vLength;
 		unsigned int in2 = indices[i + 2] * vLength;
-
+		
 		vec3 v1(vertices[in1] - vertices[in0], vertices[in1 + 1] - vertices[in0 + 1], vertices[in1 + 2] - vertices[in0 + 2]);
 		vec3 v2(vertices[in2] - vertices[in0], vertices[in2 + 1] - vertices[in0 + 1], vertices[in2 + 2] - vertices[in0 + 2]);
 
@@ -74,6 +80,8 @@ void CalAverageNormal(const unsigned int * indices, const unsigned int count, fl
 
 	for (size_t i = 0; i < verticesCount / vLength; i++)
 	{
+		//_castf32_u32();
+		//__m128i d;
 		const auto nOffset = static_cast<unsigned int>(i * vLength + normalOffset);
 		vec3 vec(vertices[nOffset], vertices[nOffset + 1], vertices[nOffset + 2]);
 		vec = normalize(vec);
@@ -146,8 +154,15 @@ void CreateShader()
 int main()
 {
 	mainWindow = Window();
-	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.5f);
+	camera = Camera(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 1.0f, 0.5f);
 	mainWindow.Initialize();
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_STENCIL_TEST);
+	glDepthFunc(GL_LESS);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_CULL_FACE);
 
 	CreateObject();
 	CreateShader();
@@ -158,6 +173,8 @@ int main()
 	diamondTexture = Texture(ctr, false);
 	diamondTexture.LoadTexture();
 	diamondTexture.SetTextureType("texture_diffuse");
+	delete[] ctr;
+	ctr = nullptr;
 	vector<Texture*> textures;
 	textures.push_back(&diamondTexture);
 
@@ -167,7 +184,7 @@ int main()
 	}
 
 	auto Model3D = Model();
-	Model3D.LoadModel("models/backpack.obj");
+	Model3D.LoadModel("models/Mineways2Skfb.obj");
 
 	const auto specularMaps = vec3(1.0f);
 	const auto ambientMaps = vec3(1.0f);
@@ -179,9 +196,19 @@ int main()
 	const auto specularLight = vec3(1.0f, 1.0f, 1.0f);
 	const auto ambientLight = vec3(0.2f);
 	const auto diffuseLight = vec3(1.0f);
-	const auto direction = vec3(50.0f, -300.0f, 500.0f);
+	const auto direction = vec3(20.0f, 10.0f, 8.0f);
 
 	mainLight = Light(ambientLight, diffuseLight, specularLight, direction);
+
+	const auto uniformAmbientColor = (shaderList[0]->GetAmbientColorLocation());
+	const auto uniformDiffuseColor = (shaderList[0]->GetDiffuseColorLocation());
+	const auto uniformSpecularColor = (shaderList[0]->GetSpecularColorLocation());
+	const auto uniformDirection = (shaderList[0]->GetLightDirectionLocation());
+	const auto uniformAmbientMaterial = (shaderList[0]->GetAmbientMaterialLocation());
+	const auto uniformSpecularMaterial = (shaderList[0]->GetSpecularMaterialLocation());
+	const auto uniformDiffuseMaterial = (shaderList[0]->GetDiffuseMaterialLocation());
+	const auto uniformShininess = (shaderList[0]->GetShininessMaterialLocation());
+	const auto uniformCameraPos = (shaderList[0]->GetCameraPosLocation());
 
 	//Loop until window closed
 	while (!mainWindow.GetShouldClose())
@@ -198,21 +225,13 @@ int main()
 			camera.MouseControl(mainWindow.GetXChange(), mainWindow.GetYChange());
 
 			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
 			for (const auto shader : shaderList)
 			{
 				shader->UseShader();
 			}
 
-			const auto uniformAmbientColor = (shaderList[0]->GetAmbientColorLocation());
-			const auto uniformDiffuseColor = (shaderList[0]->GetDiffuseColorLocation());
-			const auto uniformSpecularColor = (shaderList[0]->GetSpecularColorLocation());
-			const auto uniformDirection = (shaderList[0]->GetLightDirectionLocation());
-			const auto uniformAmbientMaterial = (shaderList[0]->GetAmbientMaterialLocation());
-			const auto uniformSpecularMaterial = (shaderList[0]->GetSpecularMaterialLocation());
-			const auto uniformDiffuseMaterial = (shaderList[0]->GetDiffuseMaterialLocation());
-			const auto uniformShininess = (shaderList[0]->GetShininessMaterialLocation());
-			const auto uniformCameraPos = (shaderList[0]->GetCameraPosLocation());
 			mainLight.UseLight(uniformSpecularColor, uniformAmbientColor, uniformDiffuseColor, uniformDirection);
 
 			const float tmp = static_cast<float>(mainWindow.GetWidth()) / static_cast<float>(mainWindow.GetHeight());

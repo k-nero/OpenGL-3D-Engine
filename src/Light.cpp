@@ -24,7 +24,6 @@ void Light::UseLight(int specularColorLocation, int ambientColorLocation, int di
 	glUniform3f(ambientColorLocation, ambientColor.x, ambientColor.y, ambientColor.z);
 	glUniform3f(diffuseColorLocation, diffuseColor.x, diffuseColor.y, diffuseColor.z);
 	glUniform3f(specularColorLocation, specularColor.x, specularColor.y, specularColor.z);
-	
 	glUniform3f(directionLocation, direction.x, direction.y, direction.z);
 }
 

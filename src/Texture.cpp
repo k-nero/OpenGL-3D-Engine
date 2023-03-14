@@ -4,6 +4,8 @@
 #include <stb_image.h>
 #include <GL/glew.h>
 
+#include <map>
+
 using namespace std;
 
 Texture::Texture()
@@ -57,12 +59,13 @@ bool Texture::LoadTexture()
 
 	glTextureStorage2D(textureId, 1, GL_RGBA8, width, height);
 	glTextureSubImage2D(textureId, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, textData);
+
 	glGenerateTextureMipmap(textureId);
 
 	glBindTextureUnit(0, textureId);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	stbi_image_free(textData);
 
+	stbi_image_free(textData);
 	return true;
 }
 

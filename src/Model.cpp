@@ -1,4 +1,5 @@
 #include "Model.h"
+#include <intrin.h>
 
 #include <iostream>
 
@@ -44,7 +45,7 @@ Model& Model::operator=(Model&& other) noexcept
 void Model::LoadModel(const string& fileName)
 {
 	Importer importer;
-	const aiScene * scene = importer.ReadFile(fileName, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
+	const aiScene * scene = importer.ReadFile( fileName, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices );
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -91,7 +92,7 @@ Mesh * Model::LoadMesh(const aiMesh* mesh, const aiScene* scene)
 		{
 			vertices.insert(vertices.end(), { 0.0f, 0.0f });
 		}
-		vertices.insert(vertices.end(), { -mesh->mNormals[i].x, -mesh->mNormals[i].y, -mesh->mNormals[i].z });
+		vertices.insert(vertices.end(), { mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z });
 	}
 
 	for (size_t i = 0; i < mesh->mNumFaces; i++)
@@ -143,6 +144,7 @@ vector<Texture*> Model::LoadMaterial(const aiMaterial * material, const aiTextur
 		auto pathStr = (string("textures/") + string(str.C_Str()));
 		auto * pathData = new char[pathStr.length() + 1];
 		strcpy_s(pathData, pathStr.length() + 1, pathStr.c_str());
+		//__movsb();
 		for (auto& j : textures_loaded)
 		{
 			if (strcmp(j->GetFileLocation(), pathData) == 0)
@@ -154,7 +156,7 @@ vector<Texture*> Model::LoadMaterial(const aiMaterial * material, const aiTextur
 		}
 		if (!skip)
 		{   // if texture hasn't been loaded already, load it
-			auto texture = new Texture(pathData, true);
+			auto texture = new Texture(pathData, false);
 			texture->SetTextureType(typeName);
 			if( texture->LoadTexture())
 			{
