@@ -16,10 +16,9 @@ Light::Light(vec3 ambient, vec3 diffuse, vec3 specular, vec3 dir)
 	diffuseColor = diffuse;
 	specularColor = specular;
 	direction = dir;
-	
 }
 
-void Light::UseLight(int specularColorLocation, int ambientColorLocation, int diffuseColorLocation, int directionLocation) const
+void Light::UseLight(const int specularColorLocation, const int ambientColorLocation, const int diffuseColorLocation, const int directionLocation) const
 {
 	glUniform3f(ambientColorLocation, ambientColor.x, ambientColor.y, ambientColor.z);
 	glUniform3f(diffuseColorLocation, diffuseColor.x, diffuseColor.y, diffuseColor.z);
@@ -27,5 +26,21 @@ void Light::UseLight(int specularColorLocation, int ambientColorLocation, int di
 	glUniform3f(directionLocation, direction.x, direction.y, direction.z);
 }
 
+void Light::InitShadowMap(const int shadowHeight, const int shadowWidth)
+{
+	shadowMap = new ShadowMap();
+	shadowMap->Init(shadowWidth, shadowHeight);
+}
+
+mat4 Light::CalculateLightTransform() const
+{
+	const mat4 lightView = lookAt(direction * vec3(10.0), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+	const mat4 lightProjection = ortho(-200.0f, 200.0f, -200.0f, 200.0f, 0.1f, 2000.0f);
+	const mat4 lightSpaceMatrix = lightProjection * lightView;
+	return lightSpaceMatrix;
+}
+
 Light::~Light()
-= default;
+{
+	//shadowMap->~ShadowMap();
+}

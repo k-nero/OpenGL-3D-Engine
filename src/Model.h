@@ -20,7 +20,7 @@ public:
 	Model& operator=(const Model& other);
 	Model(Model&& other) noexcept;
 	Model& operator=(Model&& other) noexcept;
-	void LoadModel(const string& fileName);
+	void LoadModel(const string& fileName, bool isFlip = false);
 	void RenderModel(const Shader& shader) const;
 	void ClearModel();
 	~Model() { ClearModel(); } 
@@ -31,5 +31,6 @@ private:
 	vector<Texture*> LoadMaterial(const aiMaterial* material, aiTextureType type, const string& typeName);
 
 	vector<Mesh*> meshList;
-	vector<Texture*> textures_loaded;
+	vector<Texture*> texturesLoaded;
+	bool isFlipTexture = false;
 };

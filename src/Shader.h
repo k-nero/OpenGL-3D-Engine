@@ -1,8 +1,11 @@
 #pragma once
 
+#include <glm/fwd.hpp>
+
 #include "string"
 
 using namespace std;
+using namespace glm;
 
 class Shader
 {
@@ -24,6 +27,16 @@ public:
 	[[nodiscard]] int GetShininessMaterialLocation() const;
 	[[nodiscard]] int GetCameraPosLocation() const;
 	[[nodiscard]] int getShaderIdI() const { return shaderId; }
+	[[nodiscard]] int GetDirectionalLightTransformLocation() const;
+	[[nodiscard]] int GetDirectionalShadowMapLocation() const;
+	[[nodiscard]] int GetTextureLocation() const;
+	void SetProjection(const mat4& projection) const;
+	void SetModel(const mat4& model) const;
+	void SetView(const mat4& view) const;
+	void SetCameraPos(float x, float y, float z) const;
+	void SetDirectionalLightTransform(const mat4 transform) const;
+	void SetDirectionalShadowMap(unsigned int textureUnit) const;
+	void SetTexture(unsigned int textureUnit) const;
 	void UseShader() const;
 	void ClearShader();
 	~Shader() { ClearShader(); } 
@@ -46,6 +59,10 @@ private:
 	int uniformShininessMaterial = 0;
 	//Camera
 	int uniformCameraPos = 0;
+	//shadow
+	int uniformDirectionalLightTransform = 0;
+	int uniformDirectionalShadowMap = 0;
+	int uniformTexture = 0;
 
 	void CompileShader(const char* vertexCode, const char* fragmentCode);
 	static void AddShader(unsigned int theProgram, const char* shaderCode, unsigned int shaderType);

@@ -11,7 +11,7 @@ Model::Model()
 Model::Model(const Model& other)
 {
 	meshList = other.meshList;
-	textures_loaded = other.textures_loaded;
+	texturesLoaded = other.texturesLoaded;
 }
 
 Model& Model::operator=(const Model& other)
@@ -19,7 +19,7 @@ Model& Model::operator=(const Model& other)
 	if(this != &other)
 	{
 		meshList = other.meshList;
-		textures_loaded = other.textures_loaded;
+		texturesLoaded = other.texturesLoaded;
 	}
 	return * this;
 }
@@ -28,7 +28,7 @@ Model& Model::operator=(const Model& other)
 Model::Model(Model&& other) noexcept
 {
 	meshList = std::move(other.meshList);
-	textures_loaded = std::move(other.textures_loaded);
+	texturesLoaded = std::move(other.texturesLoaded);
 }
 
 // Move assignment operator
@@ -37,13 +37,14 @@ Model& Model::operator=(Model&& other) noexcept
 	if(this != &other)
 	{
 		meshList = std::move(other.meshList);
-		textures_loaded = std::move(other.textures_loaded);
+		texturesLoaded = std::move(other.texturesLoaded);
 	}
 	return * this;
 }
 
-void Model::LoadModel(const string& fileName)
+void Model::LoadModel(const string& fileName, const bool isFlip)
 {
+	isFlipTexture = isFlip;
 	Importer importer;
 	const aiScene * scene = importer.ReadFile( fileName, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices );
 
@@ -54,10 +55,10 @@ void Model::LoadModel(const string& fileName)
 	}
 
 	LoadNode(scene->mRootNode, scene);
-	if(!textures_loaded.empty())
+	if(!texturesLoaded.empty())
 	{
 		cout << "Model " << fileName << " loaded successfully, destroying temp" << endl;
-		textures_loaded.clear();
+		texturesLoaded.clear();
 	}
 }
 
@@ -145,7 +146,7 @@ vector<Texture*> Model::LoadMaterial(const aiMaterial * material, const aiTextur
 		auto * pathData = new char[pathStr.length() + 1];
 		strcpy_s(pathData, pathStr.length() + 1, pathStr.c_str());
 		//__movsb();
-		for (auto& j : textures_loaded)
+		for (auto& j : texturesLoaded)
 		{
 			if (strcmp(j->GetFileLocation(), pathData) == 0)
 			{
@@ -156,14 +157,11 @@ vector<Texture*> Model::LoadMaterial(const aiMaterial * material, const aiTextur
 		}
 		if (!skip)
 		{   // if texture hasn't been loaded already, load it
-			auto texture = new Texture(pathData, false);
+			auto texture = new Texture(pathData, isFlipTexture);
 			texture->SetTextureType(typeName);
-			if( texture->LoadTexture())
-			{
-				cout << "Texture " << pathData << " loaded successfully" << endl;
-			}
+			texture->LoadTexture();
 			textures.push_back(texture);
-			textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
+			texturesLoaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecessary load duplicate textures.
 		}
 	}
 	return textures;
@@ -189,7 +187,7 @@ void Model::ClearModel()
 			mesh = nullptr;
 		}
 	}
-	for(auto & tmpTextures : textures_loaded)
+	for(auto & tmpTextures : texturesLoaded)
 	{
 		if(tmpTextures)
 		{

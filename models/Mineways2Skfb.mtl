@@ -1,18 +1,5 @@
 Wavefront OBJ material file
-# Contains 25 materials
-
-newmtl Stone
-Ns 0
-Ka 0.2 0.2 0.2
-Kd 1 1 1
-Ks 0 0 0
-map_Ka Mineways2Skfb-RGBA.png
-# for G3D, to make textures look blocky:
-interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
-map_Kd Mineways2Skfb-RGBA.png
-illum 2
-# d 1
-# Tr 1
+# Contains 27 materials
 
 newmtl Grass_Block
 Ns 0
@@ -25,7 +12,7 @@ interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
 map_Kd Mineways2Skfb-RGBA.png
 illum 2
 # d 1
-# Tr 1
+# Tr 0
 
 newmtl Dirt
 Ns 0
@@ -38,69 +25,22 @@ interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
 map_Kd Mineways2Skfb-RGBA.png
 illum 2
 # d 1
-# Tr 1
+# Tr 0
 
-newmtl Water
-Ns 0
+newmtl Oak_Planks
+Ns 127.5
 Ka 0.2 0.2 0.2
 Kd 1 1 1
-Ks 0.03 0.03 0.03
+Ks 0.1 0.1 0.1
 map_Ka Mineways2Skfb-RGBA.png
 # for G3D, to make textures look blocky:
 interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
 map_Kd Mineways2Skfb-RGBA.png
-map_d Mineways2Skfb-RGBA.png
-illum 4
-# d 0.535
-# Tr 0.535
-Tf 0.465 0.465 0.465
-
-newmtl Stationary_Water
-Ns 0
-Ka 0.2 0.2 0.2
-Kd 1 1 1
-Ks 0.03 0.03 0.03
-map_Ka Mineways2Skfb-RGBA.png
-# for G3D, to make textures look blocky:
-interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
-map_Kd Mineways2Skfb-RGBA.png
-map_d Mineways2Skfb-RGBA.png
-illum 4
-# d 0.535
-# Tr 0.535
-Tf 0.465 0.465 0.465
-
-newmtl Lava
-Ns 0
-Ka 0.2 0.2 0.2
-Kd 1 1 1
-Ks 0 0 0
-Ke 1 1 1
-map_Ka Mineways2Skfb-RGBA.png
-# for G3D, to make textures look blocky:
-interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
-map_Kd Mineways2Skfb-RGBA.png
-map_Ke Mineways2Skfb-RGBA.png
 illum 2
 # d 1
-# Tr 1
+# Tr 0
 
-newmtl Stationary_Lava
-Ns 0
-Ka 0.2 0.2 0.2
-Kd 1 1 1
-Ks 0 0 0
-Ke 1 1 1
-map_Ka Mineways2Skfb-RGBA.png
-# for G3D, to make textures look blocky:
-interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
-map_Kd Mineways2Skfb-RGBA.png
-map_Ke Mineways2Skfb-RGBA.png
-illum 2
-# d 1
-# Tr 1
-
-newmtl Sand
+newmtl Oak_Log
 Ns 0
 Ka 0.2 0.2 0.2
 Kd 1 1 1
@@ -111,61 +51,9 @@ interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
 map_Kd Mineways2Skfb-RGBA.png
 illum 2
 # d 1
-# Tr 1
+# Tr 0
 
-newmtl Gravel
-Ns 0
-Ka 0.2 0.2 0.2
-Kd 1 1 1
-Ks 0 0 0
-map_Ka Mineways2Skfb-RGBA.png
-# for G3D, to make textures look blocky:
-interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
-map_Kd Mineways2Skfb-RGBA.png
-illum 2
-# d 1
-# Tr 1
-
-newmtl Iron_Ore
-Ns 0
-Ka 0.2 0.2 0.2
-Kd 1 1 1
-Ks 0 0 0
-map_Ka Mineways2Skfb-RGBA.png
-# for G3D, to make textures look blocky:
-interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
-map_Kd Mineways2Skfb-RGBA.png
-illum 2
-# d 1
-# Tr 1
-
-newmtl Coal_Ore
-Ns 0
-Ka 0.2 0.2 0.2
-Kd 1 1 1
-Ks 0 0 0
-map_Ka Mineways2Skfb-RGBA.png
-# for G3D, to make textures look blocky:
-interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
-map_Kd Mineways2Skfb-RGBA.png
-illum 2
-# d 1
-# Tr 1
-
-newmtl Wood
-Ns 0
-Ka 0.2 0.2 0.2
-Kd 1 1 1
-Ks 0 0 0
-map_Ka Mineways2Skfb-RGBA.png
-# for G3D, to make textures look blocky:
-interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
-map_Kd Mineways2Skfb-RGBA.png
-illum 2
-# d 1
-# Tr 1
-
-newmtl Leaves
+newmtl Oak_Leaves
 Ns 0
 Ka 0.2 0.2 0.2
 Kd 1 1 1
@@ -177,7 +65,7 @@ map_Kd Mineways2Skfb-RGBA.png
 map_d Mineways2Skfb-RGBA.png
 illum 2
 # d 1
-# Tr 1
+# Tr 0
 
 newmtl Grass
 Ns 0
@@ -191,7 +79,7 @@ map_Kd Mineways2Skfb-RGBA.png
 map_d Mineways2Skfb-RGBA.png
 illum 2
 # d 1
-# Tr 1
+# Tr 0
 
 newmtl Dandelion
 Ns 0
@@ -205,7 +93,7 @@ map_Kd Mineways2Skfb-RGBA.png
 map_d Mineways2Skfb-RGBA.png
 illum 2
 # d 1
-# Tr 1
+# Tr 0
 
 newmtl Poppy
 Ns 0
@@ -219,9 +107,9 @@ map_Kd Mineways2Skfb-RGBA.png
 map_d Mineways2Skfb-RGBA.png
 illum 2
 # d 1
-# Tr 1
+# Tr 0
 
-newmtl Brown_Mushroom
+newmtl Spawner
 Ns 0
 Ka 0.2 0.2 0.2
 Kd 1 1 1
@@ -233,9 +121,9 @@ map_Kd Mineways2Skfb-RGBA.png
 map_d Mineways2Skfb-RGBA.png
 illum 2
 # d 1
-# Tr 1
+# Tr 0
 
-newmtl Snow_(layer)
+newmtl Oak_Stairs
 Ns 0
 Ka 0.2 0.2 0.2
 Kd 1 1 1
@@ -246,9 +134,9 @@ interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
 map_Kd Mineways2Skfb-RGBA.png
 illum 2
 # d 1
-# Tr 1
+# Tr 0
 
-newmtl Clay
+newmtl Furnace
 Ns 0
 Ka 0.2 0.2 0.2
 Kd 1 1 1
@@ -259,48 +147,9 @@ interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
 map_Kd Mineways2Skfb-RGBA.png
 illum 2
 # d 1
-# Tr 1
+# Tr 0
 
-newmtl Monster_Egg
-Ns 0
-Ka 0.2 0.2 0.2
-Kd 1 1 1
-Ks 0 0 0
-map_Ka Mineways2Skfb-RGBA.png
-# for G3D, to make textures look blocky:
-interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
-map_Kd Mineways2Skfb-RGBA.png
-illum 2
-# d 1
-# Tr 1
-
-newmtl Brown_Mushroom_(block)
-Ns 0
-Ka 0.2 0.2 0.2
-Kd 1 1 1
-Ks 0 0 0
-map_Ka Mineways2Skfb-RGBA.png
-# for G3D, to make textures look blocky:
-interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
-map_Kd Mineways2Skfb-RGBA.png
-illum 2
-# d 1
-# Tr 1
-
-newmtl Red_Mushroom_(block)
-Ns 0
-Ka 0.2 0.2 0.2
-Kd 1 1 1
-Ks 0 0 0
-map_Ka Mineways2Skfb-RGBA.png
-# for G3D, to make textures look blocky:
-interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
-map_Kd Mineways2Skfb-RGBA.png
-illum 2
-# d 1
-# Tr 1
-
-newmtl Leaves_(Acacia/Dark_Oak)
+newmtl Ladder
 Ns 0
 Ka 0.2 0.2 0.2
 Kd 1 1 1
@@ -312,9 +161,9 @@ map_Kd Mineways2Skfb-RGBA.png
 map_d Mineways2Skfb-RGBA.png
 illum 2
 # d 1
-# Tr 1
+# Tr 0
 
-newmtl Wood_(Acacia/Dark_Oak)
+newmtl Fence
 Ns 0
 Ka 0.2 0.2 0.2
 Kd 1 1 1
@@ -325,9 +174,24 @@ interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
 map_Kd Mineways2Skfb-RGBA.png
 illum 2
 # d 1
-# Tr 1
+# Tr 0
 
-newmtl Large_Flowers
+newmtl Glowstone
+Ns 0
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+Ks 0 0 0
+Ke 1 1 1
+map_Ka Mineways2Skfb-RGBA.png
+# for G3D, to make textures look blocky:
+interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
+map_Kd Mineways2Skfb-RGBA.png
+map_Ke Mineways2Skfb-RGBA.png
+illum 2
+# d 1
+# Tr 0
+
+newmtl Oak_Trapdoor
 Ns 0
 Ka 0.2 0.2 0.2
 Kd 1 1 1
@@ -339,4 +203,172 @@ map_Kd Mineways2Skfb-RGBA.png
 map_d Mineways2Skfb-RGBA.png
 illum 2
 # d 1
-# Tr 1
+# Tr 0
+
+newmtl Fence_Gate
+Ns 0
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+Ks 0 0 0
+map_Ka Mineways2Skfb-RGBA.png
+# for G3D, to make textures look blocky:
+interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
+map_Kd Mineways2Skfb-RGBA.png
+illum 2
+# d 1
+# Tr 0
+
+newmtl Cauldron
+Ns 127.5
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+Ks 0.1 0.1 0.1
+map_Ka Mineways2Skfb-RGBA.png
+# for G3D, to make textures look blocky:
+interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
+map_Kd Mineways2Skfb-RGBA.png
+map_d Mineways2Skfb-RGBA.png
+illum 2
+# d 1
+# Tr 0
+
+newmtl Double_Oak_Slab
+Ns 0
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+Ks 0 0 0
+map_Ka Mineways2Skfb-RGBA.png
+# for G3D, to make textures look blocky:
+interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
+map_Kd Mineways2Skfb-RGBA.png
+illum 2
+# d 1
+# Tr 0
+
+newmtl Oak_Slab
+Ns 0
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+Ks 0 0 0
+map_Ka Mineways2Skfb-RGBA.png
+# for G3D, to make textures look blocky:
+interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
+map_Kd Mineways2Skfb-RGBA.png
+illum 2
+# d 1
+# Tr 0
+
+newmtl Acacia_Leaves
+Ns 0
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+Ks 0 0 0
+map_Ka Mineways2Skfb-RGBA.png
+# for G3D, to make textures look blocky:
+interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
+map_Kd Mineways2Skfb-RGBA.png
+map_d Mineways2Skfb-RGBA.png
+illum 2
+# d 1
+# Tr 0
+
+newmtl Sunflower
+Ns 0
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+Ks 0 0 0
+map_Ka Mineways2Skfb-RGBA.png
+# for G3D, to make textures look blocky:
+interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
+map_Kd Mineways2Skfb-RGBA.png
+map_d Mineways2Skfb-RGBA.png
+illum 2
+# d 1
+# Tr 0
+
+newmtl Bell
+Ns 0
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+Ks 0 0 0
+map_Ka Mineways2Skfb-RGBA.png
+# for G3D, to make textures look blocky:
+interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
+map_Kd Mineways2Skfb-RGBA.png
+map_d Mineways2Skfb-RGBA.png
+illum 2
+# d 1
+# Tr 0
+
+newmtl Lantern
+Ns 178.5
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+Ks 0.14 0.14 0.14
+Ke 1 1 1
+map_Ka Mineways2Skfb-RGBA.png
+# for G3D, to make textures look blocky:
+interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
+map_Kd Mineways2Skfb-RGBA.png
+map_d Mineways2Skfb-RGBA.png
+map_Ke Mineways2Skfb-RGBA.png
+illum 2
+# d 1
+# Tr 0
+
+newmtl Bee_Nest
+Ns 0
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+Ks 0 0 0
+map_Ka Mineways2Skfb-RGBA.png
+# for G3D, to make textures look blocky:
+interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
+map_Kd Mineways2Skfb-RGBA.png
+illum 2
+# d 1
+# Tr 0
+
+newmtl Chain
+Ns 0
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+Ks 0 0 0
+map_Ka Mineways2Skfb-RGBA.png
+# for G3D, to make textures look blocky:
+interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
+map_Kd Mineways2Skfb-RGBA.png
+map_d Mineways2Skfb-RGBA.png
+illum 2
+# d 1
+# Tr 0
+
+newmtl Azalea
+Ns 0
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+Ks 0 0 0
+map_Ka Mineways2Skfb-RGBA.png
+# for G3D, to make textures look blocky:
+interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
+map_Kd Mineways2Skfb-RGBA.png
+map_d Mineways2Skfb-RGBA.png
+illum 2
+# d 1
+# Tr 0
+
+newmtl Glow_Lichen
+Ns 0
+Ka 0.2 0.2 0.2
+Kd 1 1 1
+Ks 0 0 0
+Ke 0.318794 0.318794 0.318794
+map_Ka Mineways2Skfb-RGBA.png
+# for G3D, to make textures look blocky:
+interpolateMode NEAREST_MAGNIFICATION_TRILINEAR_MIPMAP_MINIFICATION
+map_Kd Mineways2Skfb-RGBA.png
+map_d Mineways2Skfb-RGBA.png
+map_Ke Mineways2Skfb-RGBA.png
+illum 2
+# d 1
+# Tr 0

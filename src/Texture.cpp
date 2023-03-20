@@ -36,7 +36,9 @@ bool Texture::LoadTexture()
 		return false;
 	}
 
-	unsigned int format = GL_RGB;
+	cout << "Texture " << fileLocation << " loaded successfully " << endl;
+
+	unsigned int format;
 	if(bitDepth == 1)
 	{
 		format = GL_RED;
@@ -49,6 +51,14 @@ bool Texture::LoadTexture()
 	{
 		format = GL_RGBA;
 	}
+	else if(bitDepth == 8)
+	{
+		format = GL_RGBA8;
+	}
+	else
+	{
+		format = GL_RGBA16;
+	}
 
 	glCreateTextures(GL_TEXTURE_2D, 1, &textureId);
 
@@ -57,7 +67,7 @@ bool Texture::LoadTexture()
 	glTextureParameteri(textureId, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
 	glTextureParameteri(textureId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	glTextureStorage2D(textureId, 1, GL_RGBA8, width, height);
+	glTextureStorage2D(textureId, 1, GL_RGBA16, width, height);
 	glTextureSubImage2D(textureId, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, textData);
 
 	glGenerateTextureMipmap(textureId);

@@ -69,7 +69,7 @@ void Mesh::RenderMesh(const Shader & shader) const
 		{
 			number = to_string(specularNr++);
 		}
-		else if (name == "texture_norma")
+		else if (name == "texture_normal")
 		{
 			number = to_string(normalNr++);
 		}
@@ -78,7 +78,7 @@ void Mesh::RenderMesh(const Shader & shader) const
 			number = to_string(heightNr++);
 		}
 		// now set the sampler to the correct texture unit
-		glUniform1i(glGetUniformLocation(shader.getShaderIdI(), (name + number).c_str()), static_cast<int>(i));
+		//glUniform1i(glGetUniformLocation(shader.getShaderIdI(), (name + number).c_str()), static_cast<int>(i));
 		textures[i]->UseTexture(i);
 	}
 
@@ -87,6 +87,12 @@ void Mesh::RenderMesh(const Shader & shader) const
 	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL);
 	glBindVertexArray(NULL);
+
+	for (auto t : textures)
+	{
+		glBindTextureUnit(0, t->GetTextureId());
+	}
+
 }
 
 void Mesh::ClearMesh()

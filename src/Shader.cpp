@@ -1,4 +1,7 @@
 #include "Shader.h"
+
+#include "glm/gtc/type_ptr.hpp"
+
 #include "fstream"
 #include "iostream"
 
@@ -104,6 +107,56 @@ void Shader::CreateFromString(const char* vertexCode, const char* fragmentCode)
 	CompileShader(vertexCode, fragmentCode);
 }
 
+void Shader::SetTexture(unsigned textureUnit) const
+{
+	glUniform1i(uniformTexture, textureUnit);
+}
+
+int Shader::GetDirectionalLightTransformLocation() const
+{
+	return uniformDirectionalLightTransform;
+}
+
+int Shader::GetDirectionalShadowMapLocation() const
+{
+	return uniformDirectionalShadowMap;
+}
+
+int Shader::GetTextureLocation() const
+{
+	return uniformTexture;
+}
+
+void Shader::SetProjection(const mat4& projection) const
+{
+	glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, value_ptr(projection));
+}
+
+void Shader::SetModel(const mat4& model) const
+{
+	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, value_ptr(model));
+}
+
+void Shader::SetDirectionalShadowMap(const unsigned textureUnit) const
+{
+	glUniform1i(uniformDirectionalShadowMap, textureUnit);
+}
+
+void Shader::SetView(const mat4& view) const
+{
+	glUniformMatrix4fv(uniformView, 1, GL_FALSE, value_ptr(view));
+}
+
+void Shader::SetCameraPos(float x, float y, float z) const
+{
+	glUniform3f(uniformCameraPos, x, y, z);
+}
+
+void Shader::SetDirectionalLightTransform(const mat4 transform) const
+{
+	glUniformMatrix4fv(uniformDirectionalLightTransform, 1, GL_FALSE, value_ptr(transform));
+}
+
 void Shader::CompileShader(const char* vertexCode, const char* fragmentCode)
 {
 	shaderId = glCreateProgram();
@@ -150,6 +203,9 @@ void Shader::CompileShader(const char* vertexCode, const char* fragmentCode)
 	uniformSpecularMaterial = glGetUniformLocation(shaderId, "material.specular");
 	uniformShininessMaterial = glGetUniformLocation(shaderId, "material.shininess");
 	uniformCameraPos = glGetUniformLocation(shaderId, "cameraPos");
+	uniformTexture = glGetUniformLocation(shaderId, "texture_diffuse1");
+	uniformDirectionalLightTransform = glGetUniformLocation(shaderId, "directionalLightSpaceTransform");
+	uniformDirectionalShadowMap = glGetUniformLocation(shaderId, "shadowMap");
 }
 
 void Shader::UseShader() const	
@@ -190,4 +246,3 @@ void Shader::AddShader(unsigned int theProgram, const char* shaderCode, unsigned
 
 	glAttachShader(theProgram, theShader);
 }
-

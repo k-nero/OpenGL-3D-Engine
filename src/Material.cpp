@@ -19,6 +19,5 @@ void Material::UseMaterial(int specularMaterialLocation, int diffuseMaterialLoca
 	glUniform1f(shininessLocation, shininess);
 }
 
-
 Material::~Material()
 = default;

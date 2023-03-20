@@ -27,7 +27,7 @@ Window::Window(int windowWidth, int windowHeight)
 	height = windowHeight;
 }
 
-void Window::FramebufferSizeCallback(GLFWwindow* window, int width, int height)
+void Window::FramebufferSizeCallback(GLFWwindow* window, const int width, const int height)
 {
 	auto* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
 	theWindow->width = width;
@@ -35,14 +35,19 @@ void Window::FramebufferSizeCallback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-void Window::HandleKey(GLFWwindow* window, int key, int code, int action, int mode)
+void Window::HandleKey(GLFWwindow* window, const int key, int code, const int action, int mode)
 {
 	auto* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
 	const int cursorMode = glfwGetInputMode(theWindow->mainWindow, GLFW_CURSOR);
-	if(key == GLFW_KEY_ENTER && action == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		if (cursorMode == GLFW_CURSOR_NORMAL)
