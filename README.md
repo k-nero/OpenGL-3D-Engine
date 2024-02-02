@@ -1,20 +1,16 @@
 # OpenGL 3D Engine
 ### Installation
-<h4 align="left">Dependencies</h4>
-- stb single-file public domain libraries for C/C++.<br/>
-- OpenGL core profile ver 4.2 or above.<br/>
-- Assimp,  Open-Asset-Importer-Library Repository. Loads 40+ 3D-file-formats into one unified and clean data structure.<br/>
-- OpenGL Mathematics (GLM)<br/>
-- GLFW3 A multi-platform library for OpenGL, OpenGL ES, Vulkan, window and input<br/>
-<h4 align="left">3D model</h4>
-- 3D models are contained in ./models. <br/?
-- place textures in ./textures
-### Render a models
-Create a global models as following 
+### Dependencies
+Install Dependencies with vcpkg
+In case you don't have vcpkg installed, you can install it from [here]( https://github.com/microsoft/vcpkg) and add vcpkg to your PATH.
+Then navigate to the root directory and run the following command to install the dependencies.
 
-```c++
-Model model3D;
+```sh 
+vcpkg install
 ```
+
+
+### 3D Model
 
 Initialize models before enter render loop
 
