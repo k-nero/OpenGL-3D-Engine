@@ -1,6 +1,7 @@
 #include "iostream"
 #include "vector"
 #include <intrin.h>
+#include <Windows.h>
 //#include <immintrin.h>
 
 #include "GL/glew.h"
@@ -130,7 +131,7 @@ void RenderPass()
 	ObjectRenderer(mainShader);
 }
 
-int main()
+int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ PSTR, _In_ int)
 {
 	mainWindow = Window();
 	camera = Camera(vec3(0.0f, 5.0f, -8.0f), vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 10.0f, 0.5f);

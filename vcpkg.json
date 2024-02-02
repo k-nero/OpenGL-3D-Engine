@@ -1,0 +1,35 @@
+{
+  "dependencies": [
+    {
+      "name": "glew",
+      "version>=": "2.2.0#3",
+      "host": true,
+      "platform": "x64"
+    },
+    {
+      "name": "glfw3",
+      "version>=": "3.3.9",
+      "host": true,
+      "platform": "x64"
+    },
+    {
+      "name": "assimp",
+      "version>=": "5.3.1#4",
+      "host": true,
+      "platform": "x64"
+    },
+    {
+      "name": "stb",
+      "version>=": "2023-04-11#1",
+      "host": true,
+      "platform": "x64"
+    },
+    {
+      "name": "glm",
+      "version>=": "1.0.0",
+      "host": true,
+      "platform": "x64"
+    }
+  ],
+  "builtin-baseline": "f7c5a7c8fc7b8785df379b8494f323cd3182ca4c"
+}

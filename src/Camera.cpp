@@ -54,7 +54,7 @@ void Camera::KeyControl(bool* keys, float deltaTime)
 		cameraPos += up * velocity;
 	}
 	if (keys[GLFW_KEY_LEFT_SHIFT])
-	{
+	{ 
 		cameraPos -= up * velocity;
 	}
 }
@@ -88,7 +88,7 @@ void Camera::Update()
 {
 	front.x = cos(radians(yaw)) * cos(radians(pitch));
 	front.y = sin(radians(pitch));
-	front.z = sin(radians(yaw)) * cos(radians(pitch));
+	front.z = sin(radians(yaw)) * cos(radians(pitch));	
 	front = normalize(front);
 
 	right = normalize(cross(front, worldUp));
