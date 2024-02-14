@@ -6,7 +6,8 @@ In case you don't have vcpkg installed, you can install it from [here]( https://
 Then navigate to the root directory and run the following command to install the dependencies.
 
 ```sh 
-vcpkg install
+$ vcpkg x-update-baseline
+$ vcpkg install
 ```
 
 
